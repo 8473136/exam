@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.guozhi</groupId>
+        <artifactId>exam</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>com.guozhi</groupId>
+    <artifactId>exam-pc-management</artifactId>
+    <version>1.0.0</version>
+    <name>exam-pc-management</name>
+    <description>考试pc管理后台</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.guozhi</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+    </dependencies>
+</project>
