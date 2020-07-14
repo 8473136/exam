@@ -17,18 +17,22 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div>
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-sm" id="btn-expand">全部展开</button>
-                <button class="layui-btn layui-btn-normal layui-btn-sm" id="btn-fold">全部折叠</button>
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="btn-add-dict"> 添加 </button>
-            </div>
-            <table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
+            <table id="dict-table" class="layui-table" lay-filter="dict-table"></table>
         </div>
     </div>
 </div>
+<!--  头部工具栏  -->
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="unfoldAll">全部展开</button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="foldAll">全部折叠</button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="addDict"> 添加 </button>
+    </div>
+</script>
+
 <!-- 操作列 -->
 <script type="text/html" id="auth-state">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="update">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
@@ -36,10 +40,12 @@
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
     layui.use(['table', 'treetable'], function () {
-        var $ = layui.jquery;
-        var table = layui.table;
-        var treetable = layui.treetable;
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+        let $ = layui.jquery,
+        table = layui.table,
+        treetable = layui.treetable;
 
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
         // 加载表格数据
         let renderTable = function () {
             // 渲染表格
@@ -47,9 +53,10 @@
             treetable.render({
                 treeColIndex: 1,
                 treeSpid: -1,
-                treeIdName: 'authorityId',
+                treeIdName: 'id',
                 treePidName: 'parentId',
-                elem: '#munu-table',
+                toolbar: '#toolbar',
+                elem: '#dict-table',
                 url: '/dict/getAllDicts',
                 page: false,
                 cols: [[
@@ -65,17 +72,17 @@
         }
 
         // 全部展开
-        $('#btn-expand').click(function () {
-            treetable.expandAll('#munu-table');
-        });
+        let unfoldAll = function () {
+            treetable.expandAll('#dict-table');
+        }
 
-        // 全部折叠
-        $('#btn-fold').click(function () {
-            treetable.foldAll('#munu-table');
-        });
+        //全部折叠
+        let foldAll = function () {
+            treetable.foldAll('#dict-table');
+        }
 
-        // 添加
-        $('#btn-add-dict').click(function () {
+        //添加方法
+        let addDict = function () {
             var index = layer.open({
                 title: '添加字典',
                 type: 2,
@@ -88,56 +95,75 @@
                     renderTable()
                 }
             });
-        })
+        }
 
-        //监听工具条
-        table.on('tool(munu-table)', function (obj) {
-            var data = obj.data;
-            var layEvent = obj.event;
-
-            if (layEvent === 'del') {
+        //删除方法
+        let deleteDict = function (id) {
+            layer.confirm('真的删除行么', function (index) {
                 $.ajax({
                     url: '/dict/deleteDicts',
                     type: 'delete',
                     dataType: 'json',
                     data: {
-                        id: data.id
+                        id: id
                     },
                     success: function (res) {
                         if (res.code == 200){
                             layer.msg('删除成功', {
                                 icon: 1,
                                 time: 2000
-                            },function () {
-                                renderTable()
                             })
                         }else {
                             layer.msg(res.msg, {
                                 icon: 2,
                                 time: 2000
-                            },function () {
-                                renderTable()
                             })
                         }
+                        renderTable()
                     }
                 })
-            } else if (layEvent === 'edit') {
-                var index = layer.open({
-                    title: '添加字典',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: ['50%', '50%'],
-                    content: './addDict.html',
-                    success: function(layero, index){
-                        var obj =layero.find("iframe")[0].contentWindow;
-                        console.log(obj)
-                    }
-                });
+                layer.close(index);
+            });
+        }
+
+        //修改方法
+        let updateDict = function (id) {
+            layer.open({
+                title: '添加字典',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['50%', '90%'],
+                content: './addDict.html',
+                success: function(layero, index){
+                    var iframe = window['layui-layer-iframe' + index];
+                    iframe.id = id
+                }
+            });
+        }
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+        //加载数据
+        renderTable()
+
+        //表格操作栏
+        table.on('tool(dict-table)', function (obj) {
+            let data = obj.data;
+            switch (obj.event) {
+                case 'del': deleteDict(data.id); break;
+                case 'update': updateDict(data.id); break;
             }
         });
-        renderTable()
+
+        //头部工具栏监听
+        table.on('toolbar(dict-table)', function (obj) {
+            switch (obj.event) {
+                case 'unfoldAll': unfoldAll(); break;
+                case 'addDict': addDict(); break;
+                case 'foldAll': foldAll(); break;
+            }
+        })
     });
 </script>
 </body>

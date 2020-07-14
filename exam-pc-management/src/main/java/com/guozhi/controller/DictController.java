@@ -33,4 +33,9 @@ public class DictController {
     public Integer deleteDicts(Integer id){
         return dictService.deleteDicts(id);
     }
+
+    @GetMapping("getDictByParent")
+    public List<DictDTO> getDictByParent(Integer parentId){
+        return dictService.getDictByParent(parentId);
+    }
 }

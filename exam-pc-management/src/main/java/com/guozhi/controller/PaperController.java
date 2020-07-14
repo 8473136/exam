@@ -5,10 +5,7 @@ import com.guozhi.dto.PaperDTO;
 import com.guozhi.mapper.PaperMapper;
 import com.guozhi.service.PaperService;
 import com.guozhi.vo.PageVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -28,7 +25,7 @@ public class PaperController {
         return paperService.addPaper(paperDTO);
     }
 
-    @PostMapping("deletePaper")
+    @DeleteMapping("deletePaper")
     public Integer deletePaper(int id) {
         return paperService.deletePaper(id);
     }

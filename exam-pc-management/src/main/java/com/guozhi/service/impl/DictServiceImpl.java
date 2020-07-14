@@ -18,6 +18,11 @@ public class DictServiceImpl implements DictService {
     @Resource
     private DictMapper dictMapper;
 
+    /**
+     * @description 获取所有字典
+     * @author LiuChangLan
+     * @since 2020/7/14 14:48
+     */
     @Override
     public List<DictDTO> getAllDicts() {
         DictDTO dictDTO = new DictDTO();
@@ -25,15 +30,39 @@ public class DictServiceImpl implements DictService {
         return dictMapper.select(dictDTO);
     }
 
+    /**
+     * @description 新增字典
+     * @author LiuChangLan
+     * @since 2020/7/14 14:49
+     */
     @Override
     public Integer addDicts(DictDTO dictDTO) {
         return dictMapper.insertSelective(dictDTO);
     }
 
+
+    /**
+     * @description 删除字典
+     * @author LiuChangLan
+     * @since 2020/7/14 14:49
+     */
     @Override
     public Integer deleteDicts(Integer id) {
         DictDTO dictDTO = dictMapper.selectByPrimaryKey(id);
         dictDTO.setIsDeleted(1);
         return dictMapper.updateByPrimaryKeySelective(dictDTO);
+    }
+
+    /**
+     * @description 根据父节点获取子节点
+     * @author LiuChangLan
+     * @since 2020/7/14 14:49
+     */
+    @Override
+    public List<DictDTO> getDictByParent(Integer parentId) {
+        DictDTO dictDTO = new DictDTO();
+        dictDTO.setIsDeleted(0);
+        dictDTO.setParentId(parentId);
+        return dictMapper.select(dictDTO);
     }
 }

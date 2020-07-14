@@ -19,14 +19,86 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">试卷名称</label>
         <div class="layui-input-block">
-            <input type="text" name="dictN0ame" lay-verify="required" lay-reqtext="字典名称不能为空" placeholder="请输入字典名称" value="" class="layui-input">
+            <input type="text" name="paperName" lay-verify="required" lay-reqtext="试卷名称不能为空" placeholder="请输入试卷名称"
+                   value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">试卷说明</label>
         <div class="layui-input-block">
-            <select name="parentId" id="select-dict">
-                <option value="-1">请选择父级字典</option>
+            <textarea name="psperContent" placeholder="请输入考试说明" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">试卷类型</label>
+        <div class="layui-input-block">
+            <select name="paperType" id="paperType" lay-verify="required" lay-reqtext="请选择试卷类型">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">考试时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="startTime" id="startTime" lay-verify="required" lay-reqtext="考试时间不能为空"
+                   placeholder="请选择考试开始时间" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="endTime" id="endTime" lay-verify="required" lay-reqtext="结束时间不能为空"
+                   placeholder="请选择考试结束时间" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">查看分数时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="date" id="lookScoreTime" lay-verify="required" lay-reqtext="查看分数时间不能为空"
+                   placeholder="请选择查看分数时间" class="layui-input" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">考试时长</label>
+        <div class="layui-input-block">
+            <input type="text" name="examDuration" id="examDuration" lay-verify="required|number" lay-reqtext="考试时长不能为空"
+                   placeholder="请输入考试时长" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">可考次数</label>
+        <div class="layui-input-block">
+            <input type="text" name="examCount" id="examCount" lay-verify="required|number" value="1"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">总分</label>
+        <div class="layui-input-block">
+            <input type="text" name="totalScore" id="totalScore" lay-verify="required|number" lay-reqtext="考试总分不能为空"
+                   placeholder="请输入总分" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">合格分</label>
+        <div class="layui-input-block">
+            <input type="text" name="passScore" id="passScore" lay-verify="required|number" lay-reqtext="考试合格分不能为空"
+                   placeholder="请输入合格分" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">多选题算分规则</label>
+        <div class="layui-input-block">
+            <select name="businessType" id="businessType" lay-verify="required" lay-reqtext="请选择多选题算分规则">
+                <option value="">请选择</option>
             </select>
         </div>
     </div>
@@ -39,33 +111,106 @@
 </div>
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form'], function () {
+    layui.use(['form', 'laydate'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
         var form = layui.form,
             layer = layui.layer,
+            laydate = layui.laydate,
             $ = layui.$;
 
-        //监听提交
-        form.on('submit(saveBtn)', function (data) {
+
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+            //初始化日期控件
+        let initDate = function () {
+                laydate.render({
+                    elem: '#startTime',
+                    type: 'datetime'
+                });
+                laydate.render({
+                    elem: '#endTime',
+                    type: 'datetime'
+                });
+                laydate.render({
+                    elem: '#lookScoreTime',
+                    type: 'datetime'
+                });
+            }
+
+        //加载试卷类型
+        let loadPaperTypeSelect = function () {
             $.ajax({
-                url: '',
+                url: '/dict/getDictByParent',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    parentId: 1
+                },
+                success: function (res) {
+                    let html = '';
+                    for (let i in res.data) {
+                        html += '<option value="'+res.data[i].id+'">'+res.data[i].dictName+'</option>'
+                    }
+                    console.log(html)
+                    $("#paperType").append(html)
+                    form.render();//菜单渲染 把内容加载进去
+                }
+            })
+        }
+
+        //加载多选题算分规则
+        let loadBusinessType = function() {
+            $.ajax({
+                url: '/dict/getDictByParent',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    parentId: 4
+                },
+                success: function (res) {
+                    let html = '';
+                    for (let i in res.data) {
+                        html += '<option value="'+res.data[i].id+'">'+res.data[i].dictName+'</option>'
+                    }
+                    console.log(html)
+                    $("#businessType").append(html)
+                    form.render();//菜单渲染 把内容加载进去
+                }
+            })
+        }
+
+        //保存方法
+        let save = function (data) {
+            $.ajax({
+                url: '/paper/addPaper',
                 type: 'post',
                 dataType: 'json',
-                data: data.field,
+                data: data,
                 success: function (res) {
-                    if (res.code == 200){
+                    if (res.code == 200) {
                         let index = layer.alert('添加成功!', {
                             title: '添加信息'
                         }, function () {
                             // 关闭弹出层
                             layer.close(index);
-                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            let iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
-                            window.parent.renderTable()
                         });
                     }
                 }
             })
-            return false;
+        }
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        initDate()
+        loadPaperTypeSelect()
+        loadBusinessType()
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            save(data.field)
         });
 
     });

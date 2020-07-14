@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.PaperDTO;
 import com.guozhi.mapper.PaperMapper;
 import com.guozhi.service.PaperService;
+import com.guozhi.utils.utils.DateUtils;
 import com.guozhi.vo.PageVO;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,8 @@ public class PaperServiceImpl implements PaperService {
         PaperDTO paperDTO = new PaperDTO();
         paperDTO.setId(id);
         paperDTO.setIsDeleted(1);
-        return paperMapper.deleteByPrimaryKey(paperDTO);
+        paperDTO.setUpdateTime(DateUtils.currentTime());
+        return paperMapper.updateByPrimaryKeySelective(paperDTO);
     }
 
     /**

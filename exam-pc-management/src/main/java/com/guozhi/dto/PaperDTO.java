@@ -17,7 +17,7 @@ public class PaperDTO extends BaseDTO {
     private String paperName;
 
     // 试卷说明
-    private String psperContent;
+    private String paperContent;
 
     // 试卷类型 0考试 1练习
     private Integer paperType;
@@ -29,7 +29,7 @@ public class PaperDTO extends BaseDTO {
     private String endTime;
 
     // 考试时长
-    private Integer examTime;
+    private Integer examDuration;
 
     // 总分
     private Double totalScore;

@@ -3,9 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>layui</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="../../css/public.css" media="all">
     <style>
@@ -39,33 +36,24 @@
 </div>
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
+    // 接受传过来的变量
+    var id = -1;
+
     layui.use(['form'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
         var form = layui.form,
             layer = layui.layer,
             $ = layui.$;
 
-        // 加载下拉框
-        $.ajax({
-            type: 'get',
-            dataType: 'json',
-            url: '/dict/getAllDicts',
-            success: function (res) {
-                let html = ''
-                for (let index in res.data) {
-                    html += '<option value="'+res.data[index].id+'">'+res.data[index].dictName+'</option>'
-                }
-                $('#select-dict').append(html)
-                form.render();//菜单渲染 把内容加载进去
-            }
-        })
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
 
-        //监听提交
-        form.on('submit(saveBtn)', function (data) {
+        // 保存方法
+        let save = function (data) {
             $.ajax({
                 url: '/dict/addDicts',
                 type: 'post',
                 dataType: 'json',
-                data: data.field,
+                data: data,
                 success: function (res) {
                     if (res.code == 200){
                         let index = layer.alert('添加成功!', {
@@ -73,14 +61,37 @@
                         }, function () {
                             // 关闭弹出层
                             layer.close(index);
-                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            let iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
-                            window.parent.renderTable()
                         });
                     }
                 }
             })
-            return false;
+        }
+
+        // 加载下拉框
+        let loadDictSelect = function () {
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: '/dict/getAllDicts',
+                success: function (res) {
+                    let html = ''
+                    for (let index in res.data) {
+                        html += '<option value="'+res.data[index].id+'">'+res.data[index].dictName+'</option>'
+                    }
+                    $('#select-dict').append(html)
+                    form.render();//菜单渲染 把内容加载进去
+                }
+            })
+        }
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        loadDictSelect()
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            save(data.field)
         });
 
     });
