@@ -10,7 +10,7 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div>
-            <table class="layui-hide" id="paper-table" lay-filter="paper-table"></table>
+            <table class="layui-hide" id="user-table" lay-filter="user-table"></table>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
 
 <!-- 操作列 -->
 <script type="text/html" id="operating">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">发布</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">分配角色</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -48,8 +48,8 @@
         let renderTable = function () {
                 // 加载表格数据
                 table.render({
-                    elem: '#paper-table',
-                    url: '/paper/getPaperByPage',
+                    elem: '#user-table',
+                    url: '/user/getUserListByPage',
                     toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],
                     title: '用户数据表',
@@ -72,18 +72,16 @@
                     cols: [[
                         // {type: 'checkbox', fixed: 'left'}
                         {type: 'numbers'},
-                        {field: 'paperName', title: '试卷名称'},
-                        {field: 'paperTypeName', title: '试卷类型'},
-                        {field: 'totalScore', title: '总分'},
-                        {field: 'examCount', title: '可考次数'},
+                        {field: 'account', title: '用户名'},
+                        {field: 'nickName', title: '昵称'},
+                        {field: 'phone', title: '手机'},
                         {
-                            field: 'paperStatus', title: '试卷状态',
+                            field: 'userStatus', title: '用户状态',
                             templet: function (rv) {
-                                return rv.paperStatus == 0 ? '未发布' : '已发布'
+                                // return rv.userStatus == 0 ? '已激活' : '未激活'
+                                return rv.userStatus == 0 ? '<input type="checkbox" checked name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">':'<input type="checkbox" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">'
                             }
                         },
-                        {field: 'examDuration', title: '考试时长（分钟）'},
-                        {field: 'passScore', title: '合格分'},
                         {field: 'createTime', title: '创建时间'},
                         {templet: '#operating', align: 'center', title: '操作'}
                     ]]
@@ -99,8 +97,8 @@
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
-                content: './addPaper.html',
+                area: ['40%', '50%'],
+                content: './addUser.html',
                 success: function (layero, index) {
                 },
                 end: function () {
@@ -112,7 +110,7 @@
         //删除方法
         let delPaper = function (id) {
             layer.confirm('真的删除行么', function (index) {
-                http.delete('/paper/deletePaper',{id: id},true,function (res) {
+                http.delete('/user/delUser',{id: id},true,function (res) {
                     if (res.code == 200) {
                         layer.msg('删除成功', {
                             icon: 1,
@@ -137,8 +135,8 @@
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
-                content: './addPaper.html',
+                area: ['40%', '50%'],
+                content: './addUser.html',
                 success: function (layero, index) {
                     var body=layer.getChildFrame('body',index);
                     body.find("#id").val(id);
@@ -153,14 +151,14 @@
         renderTable()
 
         //头工具栏事件
-        table.on('toolbar(paper-table)', function (obj) {
+        table.on('toolbar(user-table)', function (obj) {
             switch (obj.event) {
                 case 'addPaper': addPaper(); break;
             }
         })
 
         //监听行工具事件
-        table.on('tool(paper-table)', function (obj) {
+        table.on('tool(user-table)', function (obj) {
             switch (obj.event) {
                 case 'del': delPaper(obj.data.id); break;
                 case 'edit': updPaper(obj.data.id); break;

@@ -39,10 +39,11 @@
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    layui.use(['table', 'treetable'], function () {
+    layui.use(['table', 'treetable','http'], function () {
         /**变-------------------------------量-------------------------------定-------------------------------义*/
         let $ = layui.jquery,
         table = layui.table,
+        http = layui.http,
         treetable = layui.treetable;
 
         /**方-------------------------------法-------------------------------定-------------------------------义*/
@@ -100,27 +101,19 @@
         //删除方法
         let deleteDict = function (id) {
             layer.confirm('真的删除行么', function (index) {
-                $.ajax({
-                    url: '/dict/deleteDicts',
-                    type: 'delete',
-                    dataType: 'json',
-                    data: {
-                        id: id
-                    },
-                    success: function (res) {
-                        if (res.code == 200){
-                            layer.msg('删除成功', {
-                                icon: 1,
-                                time: 2000
-                            })
-                        }else {
-                            layer.msg(res.msg, {
-                                icon: 2,
-                                time: 2000
-                            })
-                        }
-                        renderTable()
+                http.delete('/dict/deleteDicts',{id: id},true,function (res) {
+                    if (res.code == 200){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        })
+                    }else {
+                        layer.msg(res.msg, {
+                            icon: 2,
+                            time: 2000
+                        })
                     }
+                    renderTable()
                 })
                 layer.close(index);
             });
@@ -137,8 +130,11 @@
                 area: ['50%', '90%'],
                 content: './addDict.html',
                 success: function(layero, index){
-                    var iframe = window['layui-layer-iframe' + index];
-                    iframe.id = id
+                    var body=layer.getChildFrame('body',index);
+                    body.find("#id").val(id);
+                },
+                end: function () {
+                    renderTable()
                 }
             });
         }

@@ -4,6 +4,7 @@ import com.guozhi.dto.DictDTO;
 import com.guozhi.service.DictService;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.RouterFunctionDslKt;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,5 +38,15 @@ public class DictController {
     @GetMapping("getDictByParent")
     public List<DictDTO> getDictByParent(Integer parentId){
         return dictService.getDictByParent(parentId);
+    }
+
+    @GetMapping("getDictById")
+    public DictDTO getDictById(String id){
+        return dictService.getDictById(id);
+    }
+
+    @PostMapping("updateDict")
+    public Integer updateDict(DictDTO dictDTO){
+        return dictService.updateDict(dictDTO);
     }
 }

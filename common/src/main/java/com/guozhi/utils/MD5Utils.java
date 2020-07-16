@@ -1,4 +1,4 @@
-package com.guozhi.utils.utils;
+package com.guozhi.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

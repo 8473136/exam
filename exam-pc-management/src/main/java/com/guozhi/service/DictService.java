@@ -17,4 +17,8 @@ public interface DictService {
     Integer deleteDicts(Integer id);
 
     List<DictDTO> getDictByParent(Integer parentId);
+
+    DictDTO getDictById(String id);
+
+    Integer updateDict(DictDTO dictDTO);
 }

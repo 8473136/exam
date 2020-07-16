@@ -3,6 +3,7 @@ package com.guozhi.service.impl;
 import com.guozhi.dto.DictDTO;
 import com.guozhi.mapper.DictMapper;
 import com.guozhi.service.DictService;
+import com.guozhi.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -64,5 +65,21 @@ public class DictServiceImpl implements DictService {
         dictDTO.setIsDeleted(0);
         dictDTO.setParentId(parentId);
         return dictMapper.select(dictDTO);
+    }
+
+    /**
+     * @description 根据id获取信息
+     * @author LiuChangLan
+     * @since 2020/7/15 15:49
+     */
+    @Override
+    public DictDTO getDictById(String id) {
+        return dictMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer updateDict(DictDTO dictDTO) {
+        dictDTO.setUpdateTime(DateUtils.currentDateTime());
+        return dictMapper.updateByPrimaryKeySelective(dictDTO);
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guozhi.mapper.PaperMapper">
+    <select id="getPaperList" resultType="com.guozhi.rvo.PaperRVO">
+        SELECT
+            ep.id,
+            ep.paper_name,
+            ed.dict_name paperTypeName,
+            ep.total_score,
+            ep.exam_count,
+            ep.paper_status,
+            ep.pass_score,
+            ep.create_time,
+            ep.exam_duration
+        FROM
+            tab_exam_paper ep
+            INNER JOIN tab_sys_dict ed ON ep.paper_type = ed.id
+        WHERE
+            ep.is_deleted = 0
+    </select>
+</mapper>

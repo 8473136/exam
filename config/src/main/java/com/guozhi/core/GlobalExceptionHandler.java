@@ -1,6 +1,7 @@
 package com.guozhi.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,7 +23,11 @@ public class GlobalExceptionHandler {
             BusinessException businessException = (BusinessException) e;
             result.setCode(businessException.getErrorCode());
             result.setMsg(businessException.getErrorMsg());
-        }else {
+        }else if (e instanceof HttpRequestMethodNotSupportedException){
+            result.setCode(ResultStatusCode.METHOD_TYPE_EXCEPTION.getCode());
+            result.setMsg(ResultStatusCode.METHOD_TYPE_EXCEPTION.getMsg());
+        }
+        else {
             result.setCode(ResultStatusCode.SERVER_ERROR.getCode());
             result.setMsg(ResultStatusCode.SERVER_ERROR.getMsg());
         }

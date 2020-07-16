@@ -1,4 +1,4 @@
-package com.guozhi.utils.utils;
+package com.guozhi.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +12,7 @@ public class DateUtils {
 
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static String currentTime(){
+    public static String currentDateTime(){
         return simpleDateFormat.format(new Date());
     }
 

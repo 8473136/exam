@@ -1,4 +1,4 @@
-package com.guozhi.utils.utils;
+package com.guozhi.utils;
 
 import java.util.UUID;
 
@@ -9,6 +9,6 @@ import java.util.UUID;
  */
 public class UUIDUtils {
     public static String ramdomUUID(){
-        return UUID.randomUUID().toString().replace("-","");
+        return UUID.randomUUID().toString().replace("-","").toUpperCase();
     }
 }

@@ -12,7 +12,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum GlobalException implements ResultStatusEnum {
-    NO_LOGIN(1000,"未登录");
+    NO_LOGIN(1000,"未登录"),
+    ACCOUNT_OR_PASSWORD_INCORRECT(1001,"用户名不存在、或者密码不正确!"),
+    ACCOUNT_DISABLE(1002,"用户已禁用"),
+    ACCOUNT_NOT_EXISTS(1003,"用户名不存在");
     private Integer code;
     private String msg;
 }
