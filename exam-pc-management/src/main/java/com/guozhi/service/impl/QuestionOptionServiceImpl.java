@@ -1,7 +1,7 @@
 package com.guozhi.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.guozhi.dto.QuestionsDTO;
+import com.guozhi.dto.QuestionDTO;
 import com.guozhi.dto.QuestionsOptionDTO;
 import com.guozhi.mapper.QuestionOptionMapper;
 import com.guozhi.service.QuestionOptionService;
@@ -9,7 +9,6 @@ import com.guozhi.vo.PageVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author LiuchangLan
@@ -37,7 +36,7 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
     }
 
     @Override
-    public PageInfo<QuestionsDTO> selectQuestionOption(PageVO pageVO) {
+    public PageInfo<QuestionDTO> selectQuestionOption(PageVO pageVO) {
         return null;
     }
 }

@@ -1,7 +1,13 @@
 package com.guozhi.mapper;
 
-import com.guozhi.dto.QuestionsDTO;
+import com.guozhi.dto.QuestionDTO;
+import com.guozhi.rvo.QuestionRVO;
 import tk.mybatis.mapper.common.Mapper;
 
-public interface QuestionMapper extends Mapper<QuestionsDTO> {
+import java.util.List;
+
+public interface QuestionMapper extends Mapper<QuestionDTO> {
+
+    List<QuestionRVO> getQeustions();
+
 }

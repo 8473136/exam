@@ -1,10 +1,9 @@
 package com.guozhi.service;
 
 import com.github.pagehelper.PageInfo;
-import com.guozhi.dto.QuestionsDTO;
+import com.guozhi.dto.QuestionDTO;
+import com.guozhi.rvo.QuestionRVO;
 import com.guozhi.vo.PageVO;
-
-import java.util.List;
 
 /**
  * 题目Service
@@ -18,7 +17,7 @@ public interface QuestionService {
      * @author LiuChangLan
      * @since 2020/7/15 16:46
      */
-    Integer addQuestion(QuestionsDTO questionsDTO);
+    Integer addQuestion(QuestionDTO questionDTO);
 
     /**
      * @description 删除题目
@@ -32,12 +31,19 @@ public interface QuestionService {
      * @author LiuChangLan
      * @since 2020/7/15 16:46
      */
-    Integer updateQuestion(QuestionsDTO questionsDTO);
+    Integer updateQuestion(QuestionDTO questionDTO);
 
     /**
      * @description 查询题目分页
      * @author LiuChangLan
      * @since 2020/7/15 16:46
      */
-    PageInfo<QuestionsDTO> selectQuestion(PageVO pageVO);
+    PageInfo<QuestionRVO> getQuestionsByPage(PageVO pageVO);
+
+    /**
+     * @description 根据题目id查询题目详细信息
+     * @author LiuChangLan
+     * @since 2020/7/17 15:10
+     */
+    QuestionDTO getQuestionById(Integer id);
 }

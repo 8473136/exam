@@ -8,4 +8,6 @@ public interface AuthService {
 
     LoginRVO login(LoginVO loginVO) throws BusinessException;
 
+    String refreshToken(String accessToken);
+
 }

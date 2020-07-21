@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Data
 @Table(name = "tab_exam_questions")
-public class QuestionsDTO extends BaseDTO{
+public class QuestionDTO extends BaseDTO{
     // 题目名称
     private String questionName;
 

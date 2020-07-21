@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.lang.model.element.VariableElement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -64,5 +65,11 @@ public class AtuchServiceImpl implements AuthService {
         String refreshToken = UUIDUtils.ramdomUUID();
 
         return new LoginRVO(accessToken,refreshToken,System.currentTimeMillis());
+    }
+
+    @Override
+    public String refreshToken(String accessToken) {
+        JwtPayload jwtPayload = JwtUtils.decrypt(accessToken);
+        return JwtUtils.createToken(jwtPayload, 2 * 60 * 1000L);
     }
 }

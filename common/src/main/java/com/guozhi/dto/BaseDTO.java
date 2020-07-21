@@ -36,10 +36,10 @@ public class BaseDTO {
      * 创建人
      */
     @Column(name = "create_by")
-    private String createdBy;
+    private Integer createdBy;
     /**
      * 创建时间
      */
     @Column(name = "update_by")
-    private String updatedBy;
+    private Integer updatedBy;
 }

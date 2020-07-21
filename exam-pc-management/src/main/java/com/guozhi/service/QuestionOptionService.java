@@ -1,11 +1,9 @@
 package com.guozhi.service;
 
 import com.github.pagehelper.PageInfo;
-import com.guozhi.dto.QuestionsDTO;
+import com.guozhi.dto.QuestionDTO;
 import com.guozhi.dto.QuestionsOptionDTO;
 import com.guozhi.vo.PageVO;
-
-import java.util.List;
 
 /**
  * 题目选项Service
@@ -40,6 +38,6 @@ public interface QuestionOptionService {
      * @author LiuChangLan
      * @since 2020/7/15 16:46
      */
-    PageInfo<QuestionsDTO> selectQuestionOption(PageVO pageVO);
+    PageInfo<QuestionDTO> selectQuestionOption(PageVO pageVO);
 
 }

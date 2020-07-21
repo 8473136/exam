@@ -1,7 +1,8 @@
-layui.define(['layer', 'table'], function (exports) {
+layui.define(['layer', 'table','http'], function (exports) {
     var $ = layui.jquery;
     var layer = layui.layer;
     var table = layui.table;
+    var http = layui.http;
 
     var treetable = {
         // 渲染树形表格
@@ -14,9 +15,12 @@ layui.define(['layer', 'table'], function (exports) {
             if (param.data) {
                 treetable.init(param, param.data);
             } else {
-                $.getJSON(param.url, param.where, function (res) {
+                http.get(param.url,param.where,true,function (res) {
                     treetable.init(param, res.data);
-                });
+                })
+                // $.getJSON(param.url, param.where, function (res) {
+                //
+                // });
             }
         },
         // 渲染表格

@@ -8,9 +8,47 @@ layui.define(['jquery'], function (exports) {
             type: type,
             dataType: 'json',
             async: async,
+            headers: {
+                accessToken: layui.data('accessToken').accessToken
+            },
             data: data,
-            success: callback
+            success: function (res) {
+                if (res.code == 1000){
+                    // layer.msg(res.msg,{
+                    //     icon: 2
+                    // },function () {
+                    //
+                    // })
+                    window.location = '/login.html'
+                }
+                if (method == '/auth/login'){
+                    layui.data('accessToken', {
+                        key: 'accessToken',
+                        value: res.data.accessToken
+                    })
+                }else {
+                    //刷新token
+                }
+                callback(res)
+            }
         });
+    }
+
+    let refreshAuth = function () {
+        $.ajax({
+            url: requestUrl + 'auth/refreshToken',
+            type: 'post',
+            dateType: 'json',
+            data: {
+                accessToken: layui.data('accessToken').accessToken
+            },
+            success: function (token) {
+                layui.data('accessToken', {
+                    key: 'accessToken',
+                    value: token.data
+                })
+            }
+        })
     }
 
     var http = {

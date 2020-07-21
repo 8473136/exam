@@ -10,7 +10,7 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div>
-            <table class="layui-hide" id="paper-table" lay-filter="paper-table"></table>
+            <table class="layui-hide" id="question-table" lay-filter="question-table"></table>
         </div>
     </div>
 </div>
@@ -24,7 +24,6 @@
 
 <!-- 操作列 -->
 <script type="text/html" id="operating">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">发布</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -48,11 +47,11 @@
         let renderTable = function () {
                 // 加载表格数据
                 table.render({
-                    elem: '#paper-table',
-                    url: '/paper/getPaperByPage',
+                    elem: '#question-table',
+                    url: '/question/getQuestionsByPage',
                     toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],
-                    title: '用户数据表',
+                    title: '题目数据表',
                     page: true,
                     request: {
                         pageName: 'pageIndex',
@@ -72,18 +71,11 @@
                     cols: [[
                         // {type: 'checkbox', fixed: 'left'}
                         {type: 'numbers'},
-                        {field: 'paperName', title: '试卷名称'},
-                        {field: 'paperType', title: '试卷类型'},
-                        {field: 'totalScore', title: '总分'},
-                        {field: 'examCount', title: '可考次数'},
-                        {
-                            field: 'paperStatus', title: '试卷状态',
-                            templet: function (rv) {
-                                return rv.paperStatus == 0 ? '未发布' : '已发布'
-                            }
-                        },
-                        {field: 'examDuration', title: '考试时长（分钟）'},
-                        {field: 'passScore', title: '合格分'},
+                        {field: 'questionName', title: '题目名称'},
+                        {field: 'questionTypeName', title: '题目类型'},
+                        {field: 'questionSource', title: '试题出处'},
+                        {field: 'questionDepotName', title: '题目所属库'},
+                        {field: 'specialIdName', title: '所属专题'},
                         {field: 'createTime', title: '创建时间'},
                         {templet: '#operating', align: 'center', title: '操作'}
                     ]]
@@ -100,7 +92,7 @@
                 maxmin: true,
                 shadeClose: true,
                 area: ['50%', '90%'],
-                content: './addPaper.html',
+                content: './addQuestion.html',
                 success: function (layero, index) {
                 },
                 end: function () {
@@ -110,9 +102,9 @@
         }
 
         //删除方法
-        let delPaper = function (id) {
+        let delQuestion = function (id) {
             layer.confirm('真的删除行么', function (index) {
-                http.delete('/paper/deletePaper',{id: id},true,function (res) {
+                http.delete('/question/delQuestion',{id: id},true,function (res) {
                     if (res.code == 200) {
                         layer.msg('删除成功', {
                             icon: 1,
@@ -130,15 +122,15 @@
             });
         }
 
-        let updPaper = function(id){
+        let updQuestion = function(id){
             layer.open({
-                title: '添加字典',
+                title: '添加题目',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
-                content: './addPaper.html',
+                area: ['100%', '100%'],
+                content: './addQuestion.html',
                 success: function (layero, index) {
                     var body=layer.getChildFrame('body',index);
                     body.find("#id").val(id);
@@ -153,17 +145,17 @@
         renderTable()
 
         //头工具栏事件
-        table.on('toolbar(paper-table)', function (obj) {
+        table.on('toolbar(question-table)', function (obj) {
             switch (obj.event) {
                 case 'addPaper': addPaper(); break;
             }
         })
 
         //监听行工具事件
-        table.on('tool(paper-table)', function (obj) {
+        table.on('tool(question-table)', function (obj) {
             switch (obj.event) {
-                case 'del': delPaper(obj.data.id); break;
-                case 'edit': updPaper(obj.data.id); break;
+                case 'del': delQuestion(obj.data.id); break;
+                case 'edit': updQuestion(obj.data.id); break;
             }
         })
     });

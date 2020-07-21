@@ -6,6 +6,8 @@ import com.guozhi.mapper.PaperMapper;
 import com.guozhi.rvo.PaperRVO;
 import com.guozhi.service.PaperService;
 import com.guozhi.vo.PageVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

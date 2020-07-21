@@ -49,8 +49,8 @@ spring:
         # 禁用 HTML 中 Reset All 按钮
         reset-enable: false
         # 登录用户名/密码
-        login-username: admin
-        login-password: 123456
+#        login-username: admin
+#        login-password: 123456
 server:
   port: 9090
 mybatis:
@@ -64,3 +64,7 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+auth:
+  Login:
+    #不拦截的请求 逗号隔开
+    NotInterception: "/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/auth/login,/auth/refreshToken,/**/*.ico,/error,/webjars/**,/swagger-resources/**"

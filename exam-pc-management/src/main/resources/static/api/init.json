@@ -28,6 +28,12 @@
           "target": "_self"
         },
         {
+          "title": "题目管理",
+          "href": "page/question/questionList.html",
+          "icon": "fa fa-lightbulb-o",
+          "target": "_self"
+        },
+        {
           "title": "系统设置",
           "href": "",
           "icon": "fa fa-gears",
@@ -37,6 +43,12 @@
               "title": "用户管理",
               "href": "page/user/userList.html",
               "icon": "fa fa-user",
+              "target": "_self"
+            },
+            {
+              "title": "数据源监听",
+              "href": "/druid/index.html",
+              "icon": "fa fa-server",
               "target": "_self"
             }
           ]

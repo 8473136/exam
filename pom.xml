@@ -32,6 +32,7 @@
         <japidocs.version>1.4</japidocs.version>
         <pagehelper.spring.boot.version>1.2.3</pagehelper.spring.boot.version>
         <java.jwt.vetsion>3.7.0</java.jwt.vetsion>
+        <knife4j.version>2.0.2</knife4j.version>
     </properties>
 
 
@@ -100,6 +101,12 @@
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
                 <version>${java.jwt.vetsion}</version>
+            </dependency>
+            <!--            Swagger Knife4j-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
