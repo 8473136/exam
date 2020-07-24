@@ -3,6 +3,7 @@ package com.guozhi.dto;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -16,6 +17,7 @@ public class BaseDTO {
      * 主键id
      */
     @Id
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
     /**
      * 创建时间

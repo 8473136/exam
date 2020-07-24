@@ -4,7 +4,6 @@ import com.guozhi.core.BusinessException;
 import com.guozhi.rvo.LoginRVO;
 import com.guozhi.service.AuthService;
 import com.guozhi.vo.LoginVO;
-import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,6 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("auth")
-@Api(tags = "登录授权接口")
 public class AuthController {
 
     @Resource

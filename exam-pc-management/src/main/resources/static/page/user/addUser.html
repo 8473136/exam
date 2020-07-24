@@ -31,7 +31,7 @@
                    value="" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="password">
         <label class="layui-form-label required">密码</label>
         <div class="layui-input-block">
             <input type="password" name="password" lay-verify="pass" lay-reqtext="密码不能为空" placeholder="请输入密码"
@@ -120,6 +120,10 @@
         // 加载数据
         let initData = function () {
             if (id != '') {
+                console.log($("#password"))
+                $("#password").hide()
+                $("input[name=password]").prop("disabled","disabled")
+                $("input[name=account]").prop("readonly","readonly")
                 http.get('/user/getUserById', {id: id}, true, function (res) {
                     form.val("addUser", res.data);
                     form.render();

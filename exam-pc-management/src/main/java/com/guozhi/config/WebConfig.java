@@ -13,7 +13,7 @@ import java.util.Arrays;
  * @author LiuchangLan
  * @date 2020/7/16 16:42
  */
-@Configuration
+//@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${auth.Login.NotInterception}")

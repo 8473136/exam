@@ -1,6 +1,6 @@
 layui.define(['jquery'], function (exports) {
     var $ = layui.jquery,
-        requestUrl = 'http://localhost:9090/';
+        requestUrl = 'http://127.0.0.1:9090/';
 
     let ajax = function (method, type, data, async, callback) {
         $.ajax({

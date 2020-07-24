@@ -32,7 +32,8 @@
         <japidocs.version>1.4</japidocs.version>
         <pagehelper.spring.boot.version>1.2.3</pagehelper.spring.boot.version>
         <java.jwt.vetsion>3.7.0</java.jwt.vetsion>
-        <knife4j.version>2.0.2</knife4j.version>
+        <knife4j.version>2.0.4</knife4j.version>
+        <apache.poi.version>3.17</apache.poi.version>
     </properties>
 
 
@@ -108,6 +109,23 @@
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
+            <!-- apache POI for xls -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+            <!-- apache POI for xlsx -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-schemas</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -119,6 +137,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
 </project>

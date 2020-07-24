@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div>
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <select name="logType" id="logType" lay-reqtext="请选择多选题算分规则">
+                            <option value="">日志类型</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="startTime" id="startTime" placeholder="开始时间"
+                               class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="endTime" id="endTime" placeholder="结束时间"
+                               class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" lay-submit lay-filter="search" class="layui-btn icon-btn"><i class="layui-icon"></i>搜索</button>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-hide" id="user-table" lay-filter="user-table"></table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'http', 'laydate','form'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            laydate = layui.laydate,
+            http = layui.http,
+            form = layui.form,
+            $ = layui.jquery;
+
+        let searchData = {}
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+         //数据加载方法
+        let renderTable = function () {
+                // 加载表格数据
+                table.render({
+                    elem: '#user-table',
+                    url: '/log/getLogsByPage',
+                    toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
+                    defaultToolbar: ['filter', 'exports', 'print'],
+                    title: '用户数据表',
+                    page: true,
+                    request: {
+                        pageName: 'pageIndex',
+                        limitName: 'pageSize'
+                    },
+                    where: searchData,
+                    response: {
+                        statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                    },
+                    parseData: function (res) {
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.total,
+                            "data": res.data.list
+                        }
+                    },
+                    cols: [[
+                        {type: 'numbers'},
+                        {field: 'userName', title: '用户名'},
+                        {field: 'logType', title: '日志类型'},
+                        {field: 'module', title: '操作模块'},
+                        {field: 'business', title: '具体操作'},
+                        {field: 'params', title: '参数'},
+                        {field: 'execMethod', title: '操作方法'},
+                        {field: 'execTime', title: '操作时间'},
+                        {field: 'execIp', title: 'ip'},
+                        {field: 'logContent', title: '信息'}
+                    ]]
+                });
+
+            }
+
+        //初始化日期控件
+        let initDate = function () {
+            laydate.render({
+                elem: '#startTime',
+                type: 'datetime'
+            });
+            laydate.render({
+                elem: '#endTime',
+                type: 'datetime'
+            });
+        }
+
+        //加载日志类型
+        let loadLogType = function () {
+            http.get('/dict/getDictByParent',{parentId: 17},false,function (res) {
+                let html = '';
+                for (let i in res.data) {
+                    html += '<option value="'+res.data[i].id+'">'+res.data[i].dictName+'</option>'
+                }
+                console.log(html)
+                $("#logType").append(html)
+                form.render();//菜单渲染 把内容加载进去
+            })
+        }
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        renderTable()
+        initDate()
+        loadLogType()
+
+        form.on('submit(search)', function(data){
+            searchData = data.field
+            renderTable()
+        })
+    });
+</script>

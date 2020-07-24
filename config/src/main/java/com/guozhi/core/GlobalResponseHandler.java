@@ -42,6 +42,9 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         if (body instanceof String || body == null) {
             return JSON.toJSONString(result);
         }
+        if (serverHttpRequest.getURI().getPath().contains("swagger-resources")){
+            return body;
+        }
         return result;
     }
 }

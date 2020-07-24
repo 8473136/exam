@@ -1,12 +1,10 @@
 package com.guozhi.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.guozhi.core.TraceLog;
 import com.guozhi.dto.UserDTO;
 import com.guozhi.service.UserService;
 import com.guozhi.vo.PageVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,26 +22,31 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("addUser")
+    @TraceLog(module = "用户管理",business = "新增用户")
     public Integer addUser(UserDTO userDTO){
         return userService.addUser(userDTO);
     }
 
     @DeleteMapping("delUser")
+    @TraceLog(module = "用户管理",business = "删除用户")
     public Integer delUser(Integer id){
         return userService.delUser(id);
     }
 
     @PostMapping("updUser")
+    @TraceLog(module = "用户管理",business = "编辑用户")
     public Integer updUser(UserDTO userDTO){
         return userService.updUser(userDTO);
     }
 
     @GetMapping("getUserListByPage")
+    @TraceLog(module = "用户管理",business = "获取用户分页列表")
     public PageInfo<UserDTO> getUserListByPage(PageVO pageVO){
         return userService.getUserListByPage(pageVO);
     }
 
     @GetMapping("getUserById")
+    @TraceLog(module = "用户管理",business = "根据用户id查询用户信息")
     public UserDTO getUserById(Integer id){
         return userService.getUserById(id);
     }

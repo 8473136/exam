@@ -49,8 +49,16 @@ spring:
         # 禁用 HTML 中 Reset All 按钮
         reset-enable: false
         # 登录用户名/密码
-#        login-username: admin
-#        login-password: 123456
+        # login-username: admin
+        # login-password: 123456
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 100MB
+      # 设置总上传的数据大小
+      max-request-size: 100MB
+      # 开启
+      enabled: true
 server:
   port: 9090
 mybatis:
@@ -67,4 +75,4 @@ pagehelper:
 auth:
   Login:
     #不拦截的请求 逗号隔开
-    NotInterception: "/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/auth/login,/auth/refreshToken,/**/*.ico,/error,/webjars/**,/swagger-resources/**"
+    NotInterception: "/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/auth/login,/auth/refreshToken,/**/*.ico,/error,/template/**,/webjars/**,/service-worker.js,/swagger-resources/**,/precache-manifest.eea302037a9c2783bdf341d6c2dd2ca2.js,/manifest.json,/robots.txt"

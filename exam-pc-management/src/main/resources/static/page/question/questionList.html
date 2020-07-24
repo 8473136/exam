@@ -18,7 +18,8 @@
 <!--  头部工具栏  -->
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addPaper">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addQuestion">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="importQuestion">导入</button>
     </div>
 </script>
 
@@ -84,15 +85,32 @@
             }
 
         //添加方法
-        let addPaper = function () {
+        let addQuestion = function () {
             layer.open({
                 title: '添加字典',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
+                area: ['100%', '100%'],
                 content: './addQuestion.html',
+                success: function (layero, index) {
+                },
+                end: function () {
+                    renderTable()
+                }
+            });
+        }
+
+        let importQuestion = function () {
+            layer.open({
+                title: '添加字典',
+                type: 2,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: './importQuestion.html',
                 success: function (layero, index) {
                 },
                 end: function () {
@@ -147,7 +165,8 @@
         //头工具栏事件
         table.on('toolbar(question-table)', function (obj) {
             switch (obj.event) {
-                case 'addPaper': addPaper(); break;
+                case 'addQuestion': addQuestion(); break;
+                case 'importQuestion': importQuestion(); break;
             }
         })
 
