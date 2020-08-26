@@ -29,4 +29,7 @@ public class QuestionDTO extends BaseDTO{
 
     // 所属专题id
     private Integer specialId;
+
+    // 题目解析
+    private String questionAnalysis;
 }

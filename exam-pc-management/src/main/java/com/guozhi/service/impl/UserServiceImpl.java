@@ -6,6 +6,7 @@ import com.guozhi.dto.UserDTO;
 import com.guozhi.mapper.UserMapper;
 import com.guozhi.service.UserService;
 import com.guozhi.utils.DateUtils;
+import com.guozhi.utils.JwtUtils;
 import com.guozhi.utils.MD5Utils;
 import com.guozhi.utils.UUIDUtils;
 import com.guozhi.vo.PageVO;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
     public Integer addUser(UserDTO userDTO) {
         userDTO.setSalt(UUIDUtils.ramdomUUID());
         userDTO.setPassword(MD5Utils.encryption(userDTO.getPassword(), userDTO.getSalt()));
+        userDTO.setCreatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return userMapper.insertSelective(userDTO);
     }
 
@@ -37,11 +39,13 @@ public class UserServiceImpl implements UserService {
         userDTO.setIsDeleted(1);
         userDTO.setId(id);
         userDTO.setUpdateTime(DateUtils.currentDateTime());
+        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return userMapper.updateByPrimaryKeySelective(userDTO);
     }
 
     @Override
     public Integer updUser(UserDTO userDTO) {
+        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         userDTO.setUpdateTime(DateUtils.currentDateTime());
         return userMapper.updateByPrimaryKeySelective(userDTO);
     }
@@ -58,5 +62,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserById(Integer id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer setUserRole(UserDTO userDTO) {
+        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
+        userDTO.setUpdateTime(DateUtils.currentDateTime());
+        return userMapper.updateByPrimaryKeySelective(userDTO);
     }
 }

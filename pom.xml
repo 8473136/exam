@@ -32,8 +32,8 @@
         <japidocs.version>1.4</japidocs.version>
         <pagehelper.spring.boot.version>1.2.3</pagehelper.spring.boot.version>
         <java.jwt.vetsion>3.7.0</java.jwt.vetsion>
-        <knife4j.version>2.0.4</knife4j.version>
         <apache.poi.version>3.17</apache.poi.version>
+        <hutool.version>5.4.0</hutool.version>
     </properties>
 
 
@@ -103,12 +103,6 @@
                 <artifactId>java-jwt</artifactId>
                 <version>${java.jwt.vetsion}</version>
             </dependency>
-            <!--            Swagger Knife4j-->
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
             <!-- apache POI for xls -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
@@ -125,6 +119,11 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml-schemas</artifactId>
                 <version>${apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

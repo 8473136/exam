@@ -51,6 +51,28 @@ spring:
         # 登录用户名/密码
         # login-username: admin
         # login-password: 123456
+  # redis配置
+  redis:
+    # redis地址
+    host: 192.168.157.154
+    # redis端口
+    port: 6379
+    # redis库
+    database: 1
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制，对应maxTotal）
+        max-active: 50
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 3000
+        # 连接池中的最大空闲连接
+        max-idle: 20
+        # 连接池中的最小空闲连接
+        min-idle: 2
+    # 密码
+    password: 123456
+    # 连接超时时间（毫秒）
+    timeout: 30000
   servlet:
     multipart:
       # 单个文件大小
@@ -67,6 +89,7 @@ mybatis:
   configuration:
     #配置下划线转驼峰
     map-underscore-to-camel-case: true
+#分页配置
 pagehelper:
   helperDialect: mysql
   reasonable: true

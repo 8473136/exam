@@ -1,9 +1,12 @@
 package com.guozhi.controller;
 
 import com.guozhi.core.BusinessException;
+import com.guozhi.rvo.InitialHomeRVO;
 import com.guozhi.rvo.LoginRVO;
 import com.guozhi.service.AuthService;
+import com.guozhi.utils.JwtUtils;
 import com.guozhi.vo.LoginVO;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +26,34 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("login")
-    LoginRVO login(LoginVO loginVO) throws BusinessException {
+//    @TraceLog(module = "登录授权模块",business = "用户登录")
+    public LoginRVO login(LoginVO loginVO) throws BusinessException {
         return authService.login(loginVO);
     }
 
     @PostMapping("refreshToken")
-    String refreshToken(String accessToken){
+    public String refreshToken(String accessToken){
         return authService.refreshToken(accessToken);
+    }
+
+    @GetMapping("getLoginUserName")
+    public String getLoginUserName(){
+        return JwtUtils.getCurrentUserJwtPayload().getNickName();
+    }
+
+    @GetMapping("getLoginMenus")
+    public InitialHomeRVO getLoginMenus(){
+        InitialHomeRVO initialHomeRVO = new InitialHomeRVO();
+        // 设置首页信息
+        initialHomeRVO.getHomeInfo().put("title","首页");
+        initialHomeRVO.getHomeInfo().put("href","page/home/welcome.html?t=1");
+        // logo信息
+        initialHomeRVO.getLogoInfo().put("title","考试系统");
+        initialHomeRVO.getLogoInfo().put("image","images/logo.png");
+        initialHomeRVO.getLogoInfo().put("href","");
+        //菜单信息
+        initialHomeRVO.setMenuInfo(authService.getLoginMenus());
+        return initialHomeRVO;
     }
 
 }

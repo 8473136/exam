@@ -10,7 +10,7 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div>
-            <table class="layui-hide" id="user-table" lay-filter="user-table"></table>
+            <table class="layui-hide" id="paper-table" lay-filter="paper-table"></table>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
 
 <!-- 操作列 -->
 <script type="text/html" id="operating">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">分配角色</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="setRole">设置权限</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -48,8 +48,8 @@
         let renderTable = function () {
                 // 加载表格数据
                 table.render({
-                    elem: '#user-table',
-                    url: '/user/getUserListByPage',
+                    elem: '#paper-table',
+                    url: 'role/getRoleListByPage',
                     toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],
                     title: '用户数据表',
@@ -72,16 +72,8 @@
                     cols: [[
                         // {type: 'checkbox', fixed: 'left'}
                         {type: 'numbers'},
-                        {field: 'account', title: '用户名'},
-                        {field: 'nickName', title: '昵称'},
-                        {field: 'phone', title: '手机'},
-                        {
-                            field: 'userStatus', title: '用户状态',
-                            templet: function (rv) {
-                                // return rv.userStatus == 0 ? '已激活' : '未激活'
-                                return rv.userStatus == 0 ? '<input type="checkbox" checked name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">':'<input type="checkbox" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">'
-                            }
-                        },
+                        {field: 'roleName', title: '角色名称'},
+                        {field: 'remark', title: '角色描述'},
                         {field: 'createTime', title: '创建时间'},
                         {templet: '#operating', align: 'center', title: '操作'}
                     ]]
@@ -92,13 +84,13 @@
         //添加方法
         let addPaper = function () {
             layer.open({
-                title: '添加字典',
+                title: '添加角色',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['40%', '50%'],
-                content: './addUser.html',
+                area: ['30%', '40%'],
+                content: './edit.html',
                 success: function (layero, index) {
                 },
                 end: function () {
@@ -110,7 +102,7 @@
         //删除方法
         let delPaper = function (id) {
             layer.confirm('真的删除行么', function (index) {
-                http.delete('/user/delUser',{id: id},true,function (res) {
+                http.delete('role/deleteRole',{id: id},true,function (res) {
                     if (res.code == 200) {
                         layer.msg('删除成功', {
                             icon: 1,
@@ -128,16 +120,15 @@
             });
         }
 
-        // 修改
         let updPaper = function(id){
             layer.open({
-                title: '修改用户',
+                title: '添加字典',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['40%', '50%'],
-                content: './addUser.html',
+                area: ['30%', '40%'],
+                content: './edit.html',
                 success: function (layero, index) {
                     var body=layer.getChildFrame('body',index);
                     body.find("#id").val(id);
@@ -148,16 +139,15 @@
             });
         }
 
-        //添加方法
-        let setRole = function (id) {
+        let setRole = function(id){
             layer.open({
-                title: '分配角色',
+                title: '设置权限',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['40%', '50%'],
-                content: './userRole.html',
+                area: ['40%', '80%'],
+                content: './editRole.html',
                 success: function (layero, index) {
                     var body=layer.getChildFrame('body',index);
                     body.find("#id").val(id);
@@ -167,24 +157,23 @@
                 }
             });
         }
-
         /**事-------------------------------件-------------------------------绑-------------------------------定*/
 
         renderTable()
 
         //头工具栏事件
-        table.on('toolbar(user-table)', function (obj) {
+        table.on('toolbar(paper-table)', function (obj) {
             switch (obj.event) {
                 case 'addPaper': addPaper(); break;
             }
         })
 
         //监听行工具事件
-        table.on('tool(user-table)', function (obj) {
+        table.on('tool(paper-table)', function (obj) {
             switch (obj.event) {
                 case 'del': delPaper(obj.data.id); break;
                 case 'edit': updPaper(obj.data.id); break;
-                case 'release':setRole(obj.data.id);break;
+                case 'setRole': setRole(obj.data.id); break;
             }
         })
     });

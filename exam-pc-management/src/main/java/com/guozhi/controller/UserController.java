@@ -51,4 +51,10 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PostMapping("setUserRole")
+    @TraceLog(module = "用户管理",business = "设置用户权限")
+    public Integer setUserRole(UserDTO userDTO){
+        return userService.setUserRole(userDTO);
+    }
+
 }

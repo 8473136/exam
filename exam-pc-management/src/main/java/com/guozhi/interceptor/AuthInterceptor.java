@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 验证登录拦截器
  * @author LiuchangLan
  * @date 2020/6/30 11:02
  */

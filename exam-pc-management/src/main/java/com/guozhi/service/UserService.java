@@ -1,11 +1,8 @@
 package com.guozhi.service;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.UserDTO;
 import com.guozhi.vo.PageVO;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -43,5 +40,12 @@ public interface UserService {
      * @since 2020/7/16 10:38
      */
     UserDTO getUserById(Integer id);
+
+    /**
+     * @description 设置权限
+     * @author LiuChangLan
+     * @since 2020/8/24 17:45
+     */
+    Integer setUserRole(UserDTO userDTO);
 
 }

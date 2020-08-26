@@ -31,4 +31,6 @@ public class UserDTO extends BaseDTO{
 
     // 用户状态 0正常 1未激活
     private Integer userStatus;
+
+    private Integer roleId;
 }

@@ -58,6 +58,18 @@
           "href": "page/question/questionList.html",
           "icon": "fa fa-lightbulb-o",
           "target": "_self"
+        },
+        {
+          "title": "菜单管理",
+          "href": "page/menu/menuList.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "权限管理",
+          "href": "page/role/list.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
         }
       ]
     }

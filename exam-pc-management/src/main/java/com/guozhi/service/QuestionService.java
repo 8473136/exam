@@ -8,7 +8,6 @@ import com.guozhi.vo.QuestionVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,5 +53,7 @@ public interface QuestionService {
      */
     QuestionDTO getQuestionById(Integer id);
 
-    List<Map<String,Object>> importQuestion(MultipartFile file) throws IOException;
+    Map<String,Object> analyzeQuestion(MultipartFile file) throws IOException;
+
+    void importQuestion(String uuid);
 }

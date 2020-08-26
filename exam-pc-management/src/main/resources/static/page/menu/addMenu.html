@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form" lay-filter="addDict">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">菜单名称</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="id" id="id" value="" class="layui-input">
+            <input type="text" name="title" lay-verify="required" lay-reqtext="菜单名称不能为空" placeholder="请输入菜单名称" value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">父级菜单</label>
+        <div class="layui-input-block">
+            <select name="parentId" id="parentId" lay-filter="parentId">
+                <option value="-1">请选择父级菜单</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单图标</label>
+        <div class="layui-input-block">
+            <input type="text" id="selectIcon" name="icon" lay-filter="iconPicker" class="hide">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="href" placeholder="请输入菜单地址" value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单排序</label>
+        <div class="layui-input-block">
+            <input type="number" name="menuOrder" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form','http','iconPickerFa'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+        var form = layui.form,
+            layer = layui.layer,
+            http = layui.http,
+            iconPickerFa = layui.iconPickerFa,
+            $ = layui.$;
+        let id = $('#id').val()
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        // 保存方法
+        let save = function (data) {
+            http.post(id == '' ? '/menu/addMenu': '/menu/updateMenu',data,true,function (res) {
+                if (res.code == 200){
+                    let index = layer.alert('保存成功!', {
+                        title: id == '' ? '添加':'修改' + '信息'
+                    }, function () {
+                        // 关闭弹出层
+                        layer.close(index);
+                        let iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                    });
+                }
+            })
+        }
+
+        // 加载下拉框
+        let loadDictSelect = function () {
+            http.get('/menu/getAllMenus',{},false,function (res) {
+                let html = ''
+                for (let index in res.data) {
+                    html += '<option value="'+res.data[index].id+'">'+res.data[index].title+'</option>'
+                }
+                $('#parentId').append(html)
+                form.render();//菜单渲染 把内容加载进去
+            })
+        }
+
+        // 加载数据
+        let initData = function () {
+            if(id != ''){
+                http.get('/menu/getMenuById',{id: id},true,function (res) {
+                    form.val("addDict", res.data);
+                    iconPickerFa.checkIcon('iconPicker', res.data.icon);
+                    form.render();
+                })
+            }
+        }
+
+        // 加载图标选择器
+        let initialIconSelct = function (){
+            iconPickerFa.render({
+                // 选择器，推荐使用input
+                elem: '#selectIcon',
+                // fa 图标接口
+                url: "../../lib/font-awesome-4.7.0/less/variables.less",
+                // 是否开启搜索：true/false，默认true
+                search: true,
+                // 是否开启分页：true/false，默认true
+                page: true,
+                // 每页显示数量，默认12
+                limit: 12,
+                // 点击回调
+                click: function (data) {
+                    console.log(data);
+                },
+                // 渲染成功后的回调
+                success: function (d) {
+                    console.log(d);
+                }
+            });
+        }
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        initialIconSelct()
+        loadDictSelect()
+        initData()
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            let icon = 'fa '
+            icon += data.field.icon
+            data.field.icon = icon
+            console.log(data.field)
+            save(data.field)
+        });
+
+    });
+</script>
+</body>
+</html>

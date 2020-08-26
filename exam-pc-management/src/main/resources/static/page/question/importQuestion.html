@@ -84,14 +84,16 @@
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    layui.use([ 'form', 'step','upload','table'], function () {
+    layui.use([ 'form', 'step','upload','table','http'], function () {
         /**变-------------------------------量-------------------------------定-------------------------------义*/
         var $ = layui.$,
             form = layui.form,
             upload = layui.upload,
+            http = layui.http,
             table = layui.table,
-            isParsing = false;
-            step = layui.step;
+            isParsing = false,
+            step = layui.step,
+            uuid = '';
 
         /**方-------------------------------法-------------------------------定-------------------------------义*/
 
@@ -117,7 +119,7 @@
         let initUpload = function () {
             upload.render({
                 elem: '#selectFile'
-                ,url: '/question/importQuestion' //改成您自己的上传接口
+                ,url: '/question/analyzeQuestion' //改成您自己的上传接口
                 ,accept: 'file' //普通文件
                 ,auto: false
                 //,multiple: true
@@ -126,10 +128,11 @@
                     accessToken: layui.data('accessToken').accessToken
                 }
                 ,done: function(res){
+                    uuid = res.data.uuid
                     layer.msg('上传成功');
                     table.render({
                         elem: '#questionList'
-                        ,data: res.data
+                        ,data: res.data.list
                         ,cols: [[
                             {field:'questionName', title: '题干'}
                             ,{field:'questionType',title: '题目类型'}
@@ -165,6 +168,9 @@
 
         // 开始导入
         $("#startImport").click(function () {
+            http.post('question/importQuestion',{uuid: uuid},false,function (res) {
+
+            })
             step.next('#stepForm');
         })
 

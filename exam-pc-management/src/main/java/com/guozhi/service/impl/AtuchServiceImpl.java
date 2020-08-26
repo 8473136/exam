@@ -5,20 +5,22 @@ import com.guozhi.common.JwtPayload;
 import com.guozhi.core.BusinessException;
 import com.guozhi.dto.UserDTO;
 import com.guozhi.exception.GlobalException;
+import com.guozhi.mapper.RoleMenuMapper;
 import com.guozhi.mapper.UserMapper;
 import com.guozhi.rvo.LoginRVO;
+import com.guozhi.rvo.RoleMenuRVO;
 import com.guozhi.service.AuthService;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.utils.MD5Utils;
+import com.guozhi.utils.TreeUtils;
 import com.guozhi.utils.UUIDUtils;
 import com.guozhi.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.lang.model.element.VariableElement;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @author LiuchangLan
@@ -29,6 +31,9 @@ public class AtuchServiceImpl implements AuthService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
 
     @Autowired
     private HttpServletRequest request;
@@ -71,5 +76,15 @@ public class AtuchServiceImpl implements AuthService {
     public String refreshToken(String accessToken) {
         JwtPayload jwtPayload = JwtUtils.decrypt(accessToken);
         return JwtUtils.createToken(jwtPayload, 2 * 60 * 1000L);
+    }
+
+    @Override
+    public List<RoleMenuRVO> getLoginMenus() {
+        // 登录的用户id
+        Integer userId = JwtUtils.getCurrentUserJwtPayload().getId();
+        Integer roleId = userMapper.selectByPrimaryKey(userId).getRoleId();
+        List<RoleMenuRVO> roleMenu = roleMenuMapper.getRoleMenu(roleId);
+        List<RoleMenuRVO> list = TreeUtils.buildTreeHome(roleMenu, -1);
+        return list;
     }
 }

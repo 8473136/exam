@@ -3,11 +3,7 @@ package com.guozhi.controller;
 import com.guozhi.core.TraceLog;
 import com.guozhi.dto.DictDTO;
 import com.guozhi.service.DictService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.RouterFunctionDslKt;
 
 import javax.annotation.Resource;
 import java.util.List;

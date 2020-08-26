@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,9 +56,16 @@ public class QuestionController {
         return questionService.updateQuestion(questionDTO);
     }
 
-    @PostMapping("importQuestion")
-    @TraceLog(module = "题目管理",business = "批量导入题目")
-    public List<Map<String,Object>> importQuestion(MultipartFile file) throws IOException {
-        return questionService.importQuestion(file);
+    @PostMapping("analyzeQuestion")
+//    @TraceLog(module = "题目管理",business = "解析批量导入题目文件")
+    public Map<String,Object> analyzeQuestion(MultipartFile file) throws IOException {
+        return questionService.analyzeQuestion(file);
     }
+
+    @PostMapping("importQuestion")
+    @TraceLog(module = "题目管理",business = "导入题目")
+    public void importQuestion(String uuid){
+        questionService.importQuestion(uuid);
+    }
+
 }

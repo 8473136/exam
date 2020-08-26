@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 纪录日志
  * @author LiuchangLan
  * @date 2020/7/23 14:48
  */
@@ -37,20 +38,30 @@ public class WebLogAspect {
     @Resource
     private LogMapper logMapper;
 
+    /**
+     * @description 纪录操作日志
+     * @author LiuChangLan
+     * @since 2020/7/24 16:53
+     */
     @Before(POINTCUT)
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         LogDTO logDTO = loadLogDto(joinPoint);
-        if (logDTO == null) {
+        if (logDTO == null){
             return;
         }
         logMapper.insertSelective(logDTO);
     }
 
+    /**
+     * @description 纪录错误日志
+     * @author LiuChangLan
+     * @since 2020/7/24 16:53
+     */
     @AfterThrowing(pointcut = POINTCUT, throwing = "e")
     @Transactional
     public void afterThrowing(JoinPoint joinPoint, Throwable e) {
         LogDTO logDTO = loadLogDto(joinPoint);
-        // 删除已经纪录的日志
+        // 删除已经纪录的操作日志
         logMapper.delete(logDTO);
         logDTO.setLogType(DataGlobalVariable.EXCEPTION_LOG_DICT_ID);
         logDTO.setLogContent(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
@@ -82,18 +93,19 @@ public class WebLogAspect {
     public LogDTO loadLogDto(JoinPoint joinPoint) {
         // 获取自定义注解
         TraceLog traceLog = ((MethodSignature)joinPoint.getSignature()).getMethod().getAnnotation(TraceLog.class);
+        // 跳过没有注解的方法
+        if(traceLog == null){
+            return null;
+        }
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
         // 类名
         String className = joinPoint.getTarget().getClass().getName();
-        // 授权类跳过
-        if (className == DataGlobalVariable.AUTH_CLASS_PATH) {
-            return null;
-        }
         // 构造日志对象
         LogDTO logDTO = new LogDTO();
         logDTO.setExecMethod(className + "." + joinPoint.getSignature().getName());
+        //判断是否是上传文件
         logDTO.setParams(JSONObject.toJSONString(joinPoint.getArgs()));
         logDTO.setUserId(JwtUtils.getCurrentUserJwtPayload().getId());
         logDTO.setCreatedBy(JwtUtils.getCurrentUserJwtPayload().getId());

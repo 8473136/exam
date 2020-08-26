@@ -1,6 +1,7 @@
 package com.guozhi.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.QuestionDTO;
@@ -11,29 +12,25 @@ import com.guozhi.rvo.QuestionRVO;
 import com.guozhi.service.QuestionService;
 import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
+import com.guozhi.utils.UUIDUtils;
 import com.guozhi.vo.PageVO;
 import com.guozhi.vo.QuestionVO;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author LiuchangLan
@@ -47,6 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Resource
     private QuestionOptionMapper questionOptionMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     @Transactional
@@ -95,8 +95,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Map<String, Object>> importQuestion(MultipartFile file) throws IOException {
-        List<Map<String, Object>> results = new ArrayList<>();
+    public Map<String,Object> analyzeQuestion(MultipartFile file) throws IOException {
+        Map<String, Object> results = new HashMap<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         // 输入流
         InputStream inputStream = file.getInputStream();
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
@@ -119,13 +120,59 @@ public class QuestionServiceImpl implements QuestionService {
             result.put("specialId", row.getCell(4).getStringCellValue());
             result.put("questionDepot", row.getCell(5).getStringCellValue());
             result.put("answer", row.getCell(6).getStringCellValue());
-            System.out.println(row.getLastCellNum());
             for (int l = 7; l < row.getLastCellNum(); l++) {
                 char zm = (char) (l + 58);
                 result.put(String.valueOf(zm), row.getCell(l).getStringCellValue());
             }
-            results.add(result);
+            list.add(result);
         }
+        // 这条纪录的唯一标识
+        String uuid = UUIDUtils.ramdomUUID();
+        // 放入缓存中
+        results.put("list",list);
+        stringRedisTemplate.opsForValue().set(uuid, JSONObject.toJSONString(list),24, TimeUnit.HOURS);
+        results.put("uuid",uuid);
         return results;
     }
+
+    @Override
+    @Transactional
+    public void importQuestion(String uuid) {
+        String json = stringRedisTemplate.opsForValue().get(uuid);
+        List<Map> questions = JSON.parseArray(json, Map.class);
+        for (Map question : questions) {
+            QuestionDTO questionDTO = new QuestionDTO();
+            Integer questionType = Integer.valueOf(question.get("questionType").toString());
+            questionDTO.setQuestionName(String.valueOf(question.get("questionName")));
+            questionDTO.setQuestionType(questionType);
+            questionDTO.setSpecialId(Integer.valueOf(question.get("specialId").toString()));
+            questionDTO.setQuestionAnalysis(String.valueOf(question.get("questionAnalysis")));
+            questionDTO.setQuestionSource(String.valueOf(question.get("questionSource")));
+            questionDTO.setQuestionDepot(Integer.valueOf(question.get("questionDepot").toString()));
+            questionDTO.setCreatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
+            // 添加题目
+            questionMapper.insertSelective(questionDTO);
+            // 选项数量 7个是固定字段 多余的就是选项的个数
+            int optionSize = question.keySet().size() - 7;
+            // 正确答案
+            List<String> answerList = Arrays.asList(question.get("answer").toString().split("##"));
+            for (int i = 0; i < optionSize; i++) {
+                char optionKey = (char) (i + 65);
+                Integer isRightKey = answerList.contains(optionKey) ? 0 : 1;
+                QuestionsOptionDTO questionsOptionDTO = new QuestionsOptionDTO();
+                // 选项内容
+                questionsOptionDTO.setOptionContent(String.valueOf(question.get(optionKey)));
+                // 选项id
+                questionsOptionDTO.setQuestionId(questionDTO.getId());
+                // 是否为正确答案
+                questionsOptionDTO.setIsRightKey(isRightKey);
+                // 创建人
+                questionsOptionDTO.setCreatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
+                // 添加选项
+                questionOptionMapper.insertSelective(questionsOptionDTO);
+            }
+        }
+    }
+
+
 }
