@@ -3,6 +3,7 @@ layui.define(['jquery'], function (exports) {
         requestUrl = 'http://127.0.0.1:9090/';
 
     let ajax = function (method, type, data, async, callback) {
+        var loading = layer.load(0, {shade: [0.3, '#000']});
         $.ajax({
             url: requestUrl + method,
             type: type,
@@ -13,6 +14,7 @@ layui.define(['jquery'], function (exports) {
             },
             data: data,
             success: function (res) {
+                layer.close(loading);
                 if (res.code == 1000){
                     // layer.msg(res.msg,{
                     //     icon: 2
@@ -30,6 +32,10 @@ layui.define(['jquery'], function (exports) {
                     //刷新token
                 }
                 callback(res)
+            },
+            error: function(){
+                // console.log('请求失败')
+                // layer.close(loading);
             }
         });
     }

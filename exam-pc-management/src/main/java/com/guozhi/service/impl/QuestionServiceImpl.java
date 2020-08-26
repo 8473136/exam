@@ -3,6 +3,7 @@ package com.guozhi.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.QuestionDTO;
 import com.guozhi.dto.QuestionsOptionDTO;
@@ -85,6 +86,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PageInfo<QuestionRVO> getQuestionsByPage(PageVO pageVO) {
+        PageHelper.startPage(pageVO.getPageIndex(),pageVO.getPageSize());
         List<QuestionRVO> qeustions = questionMapper.getQeustions();
         return new PageInfo<>(qeustions);
     }
@@ -95,7 +97,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Map<String,Object> analyzeQuestion(MultipartFile file) throws IOException {
+    public Map<String, Object> analyzeQuestion(MultipartFile file) throws IOException {
         Map<String, Object> results = new HashMap<>();
         List<Map<String, Object>> list = new ArrayList<>();
         // 输入流
@@ -129,9 +131,9 @@ public class QuestionServiceImpl implements QuestionService {
         // 这条纪录的唯一标识
         String uuid = UUIDUtils.ramdomUUID();
         // 放入缓存中
-        results.put("list",list);
-        stringRedisTemplate.opsForValue().set(uuid, JSONObject.toJSONString(list),24, TimeUnit.HOURS);
-        results.put("uuid",uuid);
+        results.put("list", list);
+        stringRedisTemplate.opsForValue().set(uuid, JSONObject.toJSONString(list), 24, TimeUnit.HOURS);
+        results.put("uuid", uuid);
         return results;
     }
 
@@ -158,10 +160,10 @@ public class QuestionServiceImpl implements QuestionService {
             List<String> answerList = Arrays.asList(question.get("answer").toString().split("##"));
             for (int i = 0; i < optionSize; i++) {
                 char optionKey = (char) (i + 65);
-                Integer isRightKey = answerList.contains(optionKey) ? 0 : 1;
+                Integer isRightKey = answerList.contains(String.valueOf(optionKey)) ? 0 : 1;
                 QuestionsOptionDTO questionsOptionDTO = new QuestionsOptionDTO();
                 // 选项内容
-                questionsOptionDTO.setOptionContent(String.valueOf(question.get(optionKey)));
+                questionsOptionDTO.setOptionContent(String.valueOf(question.get(String.valueOf(optionKey))));
                 // 选项id
                 questionsOptionDTO.setQuestionId(questionDTO.getId());
                 // 是否为正确答案
