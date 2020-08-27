@@ -24,7 +24,7 @@
 
 <!-- 操作列 -->
 <script type="text/html" id="operating">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">发布</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="question">导题</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -148,6 +148,25 @@
                 }
             });
         }
+
+        let addQuestion = function(id){
+            layer.open({
+                title: '添加题目',
+                type: 2,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: './addQuestion.html',
+                success: function (layero, index) {
+                    var body=layer.getChildFrame('body',index);
+                    body.find("#id").val(id);
+                },
+                end: function () {
+                    renderTable()
+                }
+            });
+        }
         /**事-------------------------------件-------------------------------绑-------------------------------定*/
 
         renderTable()
@@ -164,6 +183,7 @@
             switch (obj.event) {
                 case 'del': delPaper(obj.data.id); break;
                 case 'edit': updPaper(obj.data.id); break;
+                case 'question': addQuestion(obj.data.id) ; break;
             }
         })
     });

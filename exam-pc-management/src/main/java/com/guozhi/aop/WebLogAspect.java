@@ -90,7 +90,7 @@ public class WebLogAspect {
      * @author LiuChangLan
      * @since 2020/7/23 15:55
      */
-    public LogDTO loadLogDto(JoinPoint joinPoint) {
+    private LogDTO loadLogDto(JoinPoint joinPoint) {
         // 获取自定义注解
         TraceLog traceLog = ((MethodSignature)joinPoint.getSignature()).getMethod().getAnnotation(TraceLog.class);
         // 跳过没有注解的方法

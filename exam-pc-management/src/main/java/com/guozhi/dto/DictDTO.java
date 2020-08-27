@@ -17,4 +17,6 @@ public class DictDTO extends BaseDTO{
 
     // 父级id
     private Integer parentId;
+
+    private String dictCode;
 }
