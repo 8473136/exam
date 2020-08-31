@@ -13,6 +13,9 @@
     <name>exam-pc-management</name>
     <description>考试pc管理后台</description>
 
+    <properties>
+        <docker.image.prefix>springboot</docker.image.prefix>
+    </properties>
 
 
     <dependencies>
@@ -53,6 +56,7 @@
                     </execution>
                 </executions>
             </plugin>
+<!--            数据库文档生成插件-->
             <plugin>
                 <groupId>cn.smallbun.screw</groupId>
                 <artifactId>screw-maven-plugin</artifactId>
@@ -104,6 +108,31 @@
                     </execution>
                 </executions>
             </plugin>
+<!--            docker部署插件-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <!--<version>0.2.3</version>-->
+                <version>0.4.13</version>
+                <configuration>
+                    <!-- 指定生成的镜像名 -->
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <!-- 指定 Dockerfile 路径 -->
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <!-- 指定镜像tags -->
+                    <imageTags>${project.version}</imageTags>
+                    <!-- 指定远程 docker 地址 -->
+                    <dockerHost>http://192.168.157.154:2375</dockerHost>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>1
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

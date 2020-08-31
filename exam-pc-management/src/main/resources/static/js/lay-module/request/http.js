@@ -1,6 +1,6 @@
 layui.define(['jquery'], function (exports) {
     var $ = layui.jquery,
-        requestUrl = 'http://127.0.0.1:9090/';
+        requestUrl = 'http://192.168.157.154:9090/';
 
     let ajax = function (method, type, data, async, callback) {
         var loading = layer.load(0, {shade: [0.3, '#000']});
