@@ -56,7 +56,7 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            数据库文档生成插件-->
+            <!-- 数据库文档生成插件-->
             <plugin>
                 <groupId>cn.smallbun.screw</groupId>
                 <artifactId>screw-maven-plugin</artifactId>

@@ -82,7 +82,7 @@ spring:
       # 开启
       enabled: true
 server:
-  port: 9090
+  port: 9091
 mybatis:
   #注册Mapper.xml配置文件
   mapper-locations: classpath:mapper/*.xml

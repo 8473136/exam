@@ -1,6 +1,7 @@
 layui.define(['jquery'], function (exports) {
     var $ = layui.jquery,
-        requestUrl = 'http://192.168.157.154:9090/';
+        // requestUrl = 'http://192.168.157.154:9090/';
+        requestUrl = 'http://127.0.0.1:9091/';
 
     let ajax = function (method, type, data, async, callback) {
         var loading = layer.load(0, {shade: [0.3, '#000']});
@@ -10,7 +11,8 @@ layui.define(['jquery'], function (exports) {
             dataType: 'json',
             async: async,
             headers: {
-                accessToken: layui.data('accessToken').accessToken
+                accessToken: layui.data('accessToken').accessToken,
+                'Content-Type': 'application/json;charset=utf-8;'
             },
             data: data,
             success: function (res) {

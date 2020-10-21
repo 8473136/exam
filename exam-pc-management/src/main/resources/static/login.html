@@ -190,8 +190,7 @@
             //     layer.msg('验证码不能为空');
             //     return false;
             // }
-            console.log(data)
-            http.post('/auth/login', data, true, function (res) {
+            http.post('/auth/login', JSON.stringify(data), true, function (res) {
                 console.log(res.data)
                 if (res.code != 200) {
                     layer.msg(res.msg, {

@@ -18,6 +18,7 @@ public class GlobalExceptionHandler {
     public Result exceptionHandler(Exception e){
         // 控制台打印错误
         log.error(e.getMessage(),e);
+        // e.printStackTrace();
         Result result = new Result();
         if (e instanceof BusinessException) {
             BusinessException businessException = (BusinessException) e;

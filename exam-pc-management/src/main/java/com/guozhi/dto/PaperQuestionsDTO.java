@@ -2,6 +2,8 @@ package com.guozhi.dto;
 
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -11,7 +13,11 @@ import javax.persistence.Table;
  */
 @Data
 @Table(name = "tab_exam_paper_questions")
-public class PaperQuestionsDTO extends BaseDTO{
+public class PaperQuestionsDTO{
+
+    @Id
+    @GeneratedValue(generator = "JDBC")
+    private Integer id;
     // 试卷id
     private Integer paperId;
 

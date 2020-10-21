@@ -4,8 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.PaperDTO;
 import com.guozhi.rvo.PaperRVO;
 import com.guozhi.vo.PageVO;
-
-import java.util.List;
+import com.guozhi.vo.PaperImportQuestionVO;
 
 /**
  * @description 试卷Service
@@ -48,4 +47,11 @@ public interface PaperService {
      * @since 2020/7/15 16:20
      */
     PaperDTO getPaperById(String id);
+
+    /**
+     * @description 给试卷添加题目
+     * @author LiuChangLan
+     * @since 2020/9/2 16:31
+     */
+    Integer addPaperQuestion(PaperImportQuestionVO paperImportQuestionVO);
 }

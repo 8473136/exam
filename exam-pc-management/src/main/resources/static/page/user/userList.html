@@ -29,6 +29,11 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id == 10003 ? 'checked' : '' }}>
+</script>
+
 </body>
 </html>
 
@@ -77,10 +82,11 @@
                         {field: 'phone', title: '手机'},
                         {
                             field: 'userStatus', title: '用户状态',
-                            templet: function (rv) {
-                                // return rv.userStatus == 0 ? '已激活' : '未激活'
-                                return rv.userStatus == 0 ? '<input type="checkbox" checked name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">':'<input type="checkbox" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">'
-                            }
+                            // templet: function (rv) {
+                            //     // return rv.userStatus == 0 ? '已激活' : '未激活'
+                            //     return rv.userStatus == 0 ? '<input type="checkbox" checked name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">':'<input type="checkbox" name="userStatus" lay-skin="switch" lay-filter="switchTest" lay-text="激活|未激活">'
+                            // }
+                            templet: '#switchTpl'
                         },
                         {field: 'createTime', title: '创建时间'},
                         {templet: '#operating', align: 'center', title: '操作'}

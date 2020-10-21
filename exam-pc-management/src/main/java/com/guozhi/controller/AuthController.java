@@ -6,10 +6,7 @@ import com.guozhi.rvo.LoginRVO;
 import com.guozhi.service.AuthService;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.vo.LoginVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -27,7 +24,7 @@ public class AuthController {
 
     @PostMapping("login")
 //    @TraceLog(module = "登录授权模块",business = "用户登录")
-    public LoginRVO login(LoginVO loginVO) throws BusinessException {
+    public LoginRVO login(@RequestBody LoginVO loginVO) throws BusinessException {
         return authService.login(loginVO);
     }
 

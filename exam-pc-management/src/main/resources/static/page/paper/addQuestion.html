@@ -129,23 +129,19 @@
                 });
                 return;
             }
+            data.fixedQuestion = []
+            data.randomQuestion = randomQUestionData
+            fixedQuestionData.forEach(item => {
+                data.fixedQuestion.push(item.id)
+            })
 
-            console.log(data)
-            console.log(fixedQuestionData)
-            console.log(randomQUestionData)
+            let jsonData = JSON.stringify(data)
 
-            // http.post(id == '' ? '/paper/addPaper': '/paper/updatePaper',data,true,function (res) {
-            //     if (res.code == 200){
-            //         let index = layer.alert('保存成功!', {
-            //             title: id == '' ? '添加':'修改' + '信息'
-            //         }, function () {
-            //             // 关闭弹出层
-            //             layer.close(index);
-            //             let iframeIndex = parent.layer.getFrameIndex(window.name);
-            //             parent.layer.close(iframeIndex);
-            //         });
-            //     }
-            // })
+            http.post('paper/addPaperQuestion',jsonData,true,function (res) {
+                if (res.code == 200){
+                    layer.alert('保存成功!')
+                }
+            })
         }
 
         // 加载数据
@@ -159,6 +155,7 @@
 
         }
 
+        //固定题目列表
         let loadFixedQuestion = function () {
             //第一个实例
             table.render({
@@ -186,6 +183,7 @@
             $("#passScore").val(passScore)
         }
 
+        //随机题目列表
         let loadRandomQuestion= function () {
             //第一个实例
             table.render({
@@ -205,7 +203,9 @@
             randomQUestionData.forEach(item => {
                 sumScore += (parseInt(item.questionScore) * parseInt(item.questionNum))
             })
+            // 合格分默认是总分的 百分之60
             passScore = sumScore * 0.6
+            // 渲染合格分 和 总分
             $("#totalScore").val(sumScore)
             $("#passScore").val(passScore)
         }
@@ -266,7 +266,8 @@
             switch (obj.event) {
                 case 'del':
                     var data = obj.data;
-                    console.log(fixedQuestionData.indexOf(obj.data))
+                    fixedQuestionData.splice(data,1)
+                    loadFixedQuestion()
                 break;
             }
         })
@@ -275,7 +276,11 @@
         table.on('tool(randomQuestion)', function (obj) {
             console.log(obj)
             switch (obj.event) {
-                case 'del': console.log('删除'); break;
+                case 'del':
+                    var data = obj.data;
+                    randomQUestionData.splice(data,1)
+                    loadRandomQuestion()
+                break;
             }
         })
     });

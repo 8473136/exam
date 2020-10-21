@@ -6,6 +6,7 @@ import com.guozhi.dto.PaperDTO;
 import com.guozhi.rvo.PaperRVO;
 import com.guozhi.service.PaperService;
 import com.guozhi.vo.PageVO;
+import com.guozhi.vo.PaperImportQuestionVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -49,5 +50,11 @@ public class PaperController {
     @TraceLog(module = "试卷管理",business = "编辑试卷")
     public Integer updatePaper(PaperDTO paperDTO){
         return paperService.updatePaper(paperDTO);
+    }
+
+    @PostMapping("addPaperQuestion")
+    @TraceLog(module = "试卷管理",business = "给试卷添加题目")
+    public Integer addPaperQuestion(@RequestBody PaperImportQuestionVO data){
+        return paperService.addPaperQuestion(data);
     }
 }
