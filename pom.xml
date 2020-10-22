@@ -19,7 +19,7 @@
         <module>config</module>
         <module>common</module>
         <module>exam-pc-management</module>
-        <module>exam-pc-user</module>
+        <module>exam-pc</module>
     </modules>
 
     <properties>

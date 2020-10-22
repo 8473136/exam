@@ -185,6 +185,7 @@
 
         // 加载数据
         let initData = function () {
+            console.log('id' + id)
             if(id != ''){
                 http.get('/paper/getPaperById',{id: id},true,function (res) {
                     form.val("addPaper", res.data);
