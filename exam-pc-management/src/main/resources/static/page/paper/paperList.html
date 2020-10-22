@@ -84,8 +84,8 @@
                         },
                         {field: 'examDuration', title: '考试时长（分钟）'},
                         {field: 'passScore', title: '合格分'},
-                        {field: 'createTime', title: '创建时间'},
-                        {templet: '#operating', align: 'center', title: '操作'}
+                        {field: 'createTime', title: '创建时间', width: 200},
+                        {templet: '#operating', align: 'center', title: '操作', width: 200}
                     ]]
                 });
 
@@ -94,12 +94,12 @@
         //添加方法
         let addPaper = function () {
             layer.open({
-                title: '添加字典',
+                title: '添加试卷',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
+                area: ['100%', '100%'],
                 content: './addPaper.html',
                 success: function (layero, index) {
                 },
@@ -132,12 +132,12 @@
 
         let updPaper = function(id){
             layer.open({
-                title: '添加字典',
+                title: '修改试卷',
                 type: 2,
                 shade: 0.2,
                 maxmin: true,
                 shadeClose: true,
-                area: ['50%', '90%'],
+                area: ['100%', '100%'],
                 content: './addPaper.html',
                 success: function (layero, index) {
                     var body=layer.getChildFrame('body',index);

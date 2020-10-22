@@ -21,6 +21,7 @@
 <div class="layui-form layuimini-form" lay-filter="addQuesion">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>题目信息</legend>
+        <div id="id" layui-hide></div>
     </fieldset>
     <div class="layui-form-item">
         <label class="layui-form-label required">题目类型</label>
@@ -29,7 +30,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">试题题干</label>
         <div class="layui-input-block">
-            <div id="questionName"></div>
+            <div id="questionName" ></div>
         </div>
     </div>
     <div class="layui-form-item">
@@ -122,7 +123,7 @@
             http = layui.http,
             wangEditor = layui.wangEditor,
             $ = layui.$;
-        let id = $('#id').val()
+        let id = $("#id").val();
         let letterArr = []
         let zm = 2
         let editors = [];
@@ -264,6 +265,7 @@
         let initData = function () {
             if(id != ''){
                 http.get('/question/getQuestionById',{id: id},true,function (res) {
+
                     form.val("addQuesion", res.data);
                     form.render();
                 })

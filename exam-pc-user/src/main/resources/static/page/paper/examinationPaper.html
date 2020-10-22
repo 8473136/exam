@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        .smallChar {
+            font-size: 12px;
+        }
+
+        .gz-border {
+            border: 1px solid darkgray;
+        }
+
+        .gz-exam-size {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-card">
+        <div class=" layui-card-body">
+            <!--考试题目-->
+            <div class="gz-border gz-exam-size">
+                <div id="questonView"></div>
+            </div>
+            <!--考题选择-->
+            <div class="gz-border"></div>
+        </div>
+    </div>
+
+</div>
+
+<script id="question" type="text/html">
+    <div>
+        {{# layui.each(d.data, function(index, item){ }}
+        <h2 align="center">{{ item.paperName }}</h2>
+        <div>
+
+            <div class="smallChar"><b> {{ item.questionType }} </b>    ({{ item.questionType }}每题为{{ item.questionScore }} 分)</div>
+            <hr/>
+            <div> {{ item.questionName }}</div>
+            {{# layui.each(item.questions, function(index, question){ }}
+            <button type="button" class="layui-btn layui-btn-fluid">{{ String.fromCharCode(index + 65) }}、{{ question.optionContent }}</button>
+            {{# }) }}
+        </div>
+
+        {{# }) }}
+    </div>
+</script>
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+    layui.use(['table', 'http', 'form', 'laytpl'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            form = layui.form,
+            laytpl = layui.laytpl
+        $ = layui.jquery;
+
+        let questionHtml = $('#question').html(),
+            questionView = $('#questonView')
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        let initExamination = function () {
+            $.get('/paper/getPaperById', {id: '5'}, false, function (res) {
+                console.log(res);
+            })
+            let data = {
+                "code": 200,
+                "msg": "OK",
+                "data": [{
+                    "id": 5,
+                    "paperName": "测试卷子",
+                    "paperContent": "",
+                    "questionType": "选择题",
+                    "questionScore": 3,
+                    "paperType": 3,
+                    "startTime": "2020-07-14 00:00:00",
+                    "endTime": "2020-07-31 00:00:00",
+                    "examDuration": 60,
+                    "totalScore": 1.0,
+                    "passScore": 0.6,
+                    "businessType": 6,
+                    "lookScoreTime": "2020-08-26 00:00:00",
+                    "examCount": 1,
+                    "questions": [
+                        {
+                            "optionContent": "这是题目"
+                        }
+                    ]
+                }]
+            }
+            laytpl(questionHtml).render(data, function (html) {
+                questionView.html(html);
+            })
+        }
+
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+        initExamination()
+    })
+</script>

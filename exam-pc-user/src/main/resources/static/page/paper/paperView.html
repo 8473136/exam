@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        .smallGrayChar{
+            font-size: 12px;
+            color: darkgray;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-card">
+        <div class=" layui-card-body">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" placeholder="请输入关键字搜索" class="layui-input" width="500px">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-normal">搜索</button>
+                </div>
+            </div>
+
+            <div id="examView"></div>
+
+        </div>
+    </div>
+
+</div>
+
+<script id="exam11" type="text/html">
+    {{#  layui.each(d.data, function(index, item){ }}
+    <div style="border: 1px solid lightgray;width: 600px;height: 100px;padding: 10px">
+        <h2>{{  item.paperName  }}</h2>
+        <br/>
+        <div class="smallGrayChar"><b>总分:</b> {{  item.totalScore  }} | <b>及格分:</b> {{ item.passScore }} | <b>可考次数:</b> {{ item.examCount }}</div>
+        <div class="smallGrayChar"><b>开考时间:</b> {{ item.startTime }} | <b>结束时间:</b> {{ item.endTime }}</div>
+
+    </div>
+    {{#  }); }}
+</script>
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+    layui.use(['table','http','form','laytpl'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            form = layui.form,
+            laytpl = layui.laytpl
+            $ = layui.jquery;
+
+        let examHtml = $('#exam11').html(),
+            examView = $('#examView')
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        let initExamination = function() {
+            $.get('/paper/getPaperById', {id:'5'}, false, function (res) {
+                console.log(res);
+            })
+            let data = {
+                "code": 200,
+                    "msg": "OK",
+                    "data": [{
+                    "id": 5,
+                        "createTime": "2020-07-14 16:23:40",
+                        "updateTime": "2020-10-21 15:29:34",
+                        "isDeleted": 0,
+                        "createdBy": null,
+                        "updatedBy": 4,
+                        "paperName": "测试卷子",
+                        "paperContent": "",
+                        "paperType": 3,
+                        "startTime": "2020-07-14 00:00:00",
+                        "endTime": "2020-07-31 00:00:00",
+                        "examDuration": 60,
+                        "totalScore": 1.0,
+                        "passScore": 0.6,
+                        "paperStatus": 0,
+                        "releaseTime": null,
+                        "businessType": 6,
+                        "lookScoreTime": "2020-08-26 00:00:00",
+                        "examCount": 1
+                }]
+            }
+            laytpl(examHtml).render(data, function (html) {
+                examView.html(html);
+            })
+        }
+
+
+
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+        initExamination()
+    })
+</script>
