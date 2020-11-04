@@ -247,7 +247,7 @@
 
             console.log(data)
             data.options = JSON.stringify(options)
-            http.post('/question/addQuestion',data,true,function (res) {
+            http.post('/question/addQuestion',JSON.stringify(data),true,function (res) {
                 if (res.code == 200){
                     let index = layer.alert('保存成功!', {
                         title: id == '' ? '添加':'修改' + '信息'

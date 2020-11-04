@@ -1,8 +1,8 @@
 package com.guozhi.controller;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.guozhi.core.TraceLog;
 import com.guozhi.dto.MenuDTO;
-import com.guozhi.rvo.RoleMenuRVO;
 import com.guozhi.service.MenuService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +29,7 @@ public class MenuController {
 
     @PostMapping("/addMenu")
     @TraceLog(module = "菜单管理",business = "新增菜单")
-    public Integer addMenu(MenuDTO menuDTO){
+    public Integer addMenu(@RequestBody MenuDTO menuDTO){
         return menuService.addMenu(menuDTO);
     }
 
@@ -47,13 +47,13 @@ public class MenuController {
 
     @PostMapping("updateMenu")
     @TraceLog(module = "菜单管理",business = "修改菜单")
-    public Integer updateMenu(MenuDTO menuDTO){
+    public Integer updateMenu(@RequestBody MenuDTO menuDTO){
         return menuService.updateMenu(menuDTO);
     }
 
     @GetMapping("getMenuTree")
     @TraceLog(module = "菜单管理",business = "获取权限列表菜单")
-    public List<RoleMenuRVO> getMenuTree(Integer roleId){
+    public List<Tree<String>> getMenuTree(Integer roleId){
         return menuService.getMenuTree(roleId);
     }
 }

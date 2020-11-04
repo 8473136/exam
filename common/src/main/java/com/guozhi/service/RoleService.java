@@ -3,6 +3,7 @@ package com.guozhi.service;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.RoleDTO;
 import com.guozhi.vo.PageVO;
+import com.guozhi.vo.RoleMenuVO;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public interface RoleService {
      * @author LiuChangLan
      * @since 2020/8/24 16:40
      */
-    Integer setRole(Integer roleId,String menuIds);
+    Integer setRole(RoleMenuVO vo);
 
     /**
      * @description 获取所有权限列表

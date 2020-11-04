@@ -1,7 +1,7 @@
 package com.guozhi.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.guozhi.dto.MenuDTO;
-import com.guozhi.rvo.RoleMenuRVO;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface MenuService {
 
     Integer updateMenu(MenuDTO menuDTO);
 
-    List<RoleMenuRVO> getMenuTree(Integer roleId);
+    List<Tree<String>> getMenuTree(Integer roleId);
 }

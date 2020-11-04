@@ -5,10 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.guozhi.dto.UserDTO;
 import com.guozhi.mapper.UserMapper;
 import com.guozhi.service.UserService;
-import com.guozhi.utils.DateUtils;
-import com.guozhi.utils.JwtUtils;
-import com.guozhi.utils.MD5Utils;
-import com.guozhi.utils.UUIDUtils;
 import com.guozhi.vo.PageVO;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +13,7 @@ import java.util.List;
 
 /**
  * @author LiuchangLan
- * @date 2020/7/16 10:29
+ * @date 2020/11/4 10:46
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,48 +22,19 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public Integer addUser(UserDTO userDTO) {
-        userDTO.setSalt(UUIDUtils.ramdomUUID());
-        userDTO.setPassword(MD5Utils.encryption(userDTO.getPassword(), userDTO.getSalt()));
-        userDTO.setCreatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        return userMapper.insertSelective(userDTO);
-    }
-
-    @Override
-    public Integer delUser(Integer id) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setIsDeleted(1);
-        userDTO.setId(id);
-        userDTO.setUpdateTime(DateUtils.currentDateTime());
-        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        return userMapper.updateByPrimaryKeySelective(userDTO);
-    }
-
-    @Override
-    public Integer updUser(UserDTO userDTO) {
-        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        userDTO.setUpdateTime(DateUtils.currentDateTime());
-        return userMapper.updateByPrimaryKeySelective(userDTO);
-    }
-
-    @Override
     public PageInfo<UserDTO> getUserListByPage(PageVO pageVO) {
         PageHelper.startPage(pageVO.getPageIndex(),pageVO.getPageSize());
-        UserDTO userDTO = new UserDTO();
-        userDTO.setIsDeleted(0);
-        List<UserDTO> userDTOS = userMapper.select(userDTO);
-        return new PageInfo<>(userDTOS);
+        UserDTO dto = new UserDTO();
+        dto.setIsDeleted(0);
+        List<UserDTO> dtos = userMapper.select(dto);
+        return new PageInfo<UserDTO>(dtos);
     }
 
     @Override
-    public UserDTO getUserById(Integer id) {
-        return userMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public Integer setUserRole(UserDTO userDTO) {
-        userDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        userDTO.setUpdateTime(DateUtils.currentDateTime());
-        return userMapper.updateByPrimaryKeySelective(userDTO);
+    public List<UserDTO> getUserAll() {
+        UserDTO dto = new UserDTO();
+        dto.setIsDeleted(0);
+        List<UserDTO> dtos = userMapper.select(dto);
+        return dtos;
     }
 }

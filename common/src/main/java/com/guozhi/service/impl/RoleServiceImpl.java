@@ -10,6 +10,7 @@ import com.guozhi.service.RoleService;
 import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.vo.PageVO;
+import com.guozhi.vo.RoleMenuVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +23,13 @@ import java.util.List;
  */
 @Service
 public class RoleServiceImpl implements RoleService {
-    
+
     @Resource
     private RoleMapper roleMapper;
 
     @Resource
     private RoleMenuMapper roleMenuMapper;
-    
+
     @Override
     public PageInfo<RoleDTO> getRoleListByPage(PageVO pageVO) {
         PageHelper.startPage(pageVO.getPageIndex(),pageVO.getPageSize());
@@ -67,13 +68,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public Integer setRole(Integer roleId, String menuIds) {
+    public Integer setRole(RoleMenuVO vo) {
         Integer count = 0;
         // 获取菜单id
-        String[] split = menuIds.split(",");
+        String[] split = vo.getMenuId().split(",");
         // 删除所有权限
         RoleMenuDTO roleMenuDTO = new RoleMenuDTO();
-        roleMenuDTO.setRoleId(roleId);
+        roleMenuDTO.setRoleId(vo.getRoleId());
         roleMenuMapper.delete(roleMenuDTO);
         // 重新添加权限
         for (String s : split) {

@@ -6,10 +6,10 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.guozhi.common.DataGlobalVariable;
 import com.guozhi.common.JwtPayload;
 import com.guozhi.core.BusinessException;
-import com.guozhi.dto.UserDTO;
+import com.guozhi.dto.AdminDTO;
 import com.guozhi.exception.GlobalException;
 import com.guozhi.mapper.RoleMenuMapper;
-import com.guozhi.mapper.UserMapper;
+import com.guozhi.mapper.AdminMapper;
 import com.guozhi.rvo.InitialHomeRVO;
 import com.guozhi.rvo.LoginRVO;
 import com.guozhi.rvo.RoleMenuRVO;
@@ -33,7 +33,7 @@ import java.util.List;
 public class AtuchServiceImpl implements AuthService {
 
     @Resource
-    private UserMapper userMapper;
+    private AdminMapper adminMapper;
 
     @Resource
     private RoleMenuMapper roleMenuMapper;
@@ -43,10 +43,10 @@ public class AtuchServiceImpl implements AuthService {
 
     @Override
     public LoginRVO login(LoginVO loginVO) throws BusinessException {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setIsDeleted(0);
-        userDTO.setAccount(loginVO.getAccount());
-        UserDTO loginUserInfo = userMapper.selectOne(userDTO);
+        AdminDTO adminDTO = new AdminDTO();
+        adminDTO.setIsDeleted(0);
+        adminDTO.setAccount(loginVO.getAccount());
+        AdminDTO loginUserInfo = adminMapper.selectOne(adminDTO);
 
         // 用户不存在
         if (loginUserInfo == null) {
@@ -93,7 +93,7 @@ public class AtuchServiceImpl implements AuthService {
         initialHomeRVO.getLogoInfo().put("href","");
         // 登录的用户id
         Integer userId = JwtUtils.getCurrentUserJwtPayload().getId();
-        Integer roleId = userMapper.selectByPrimaryKey(userId).getRoleId();
+        Integer roleId = adminMapper.selectByPrimaryKey(userId).getRoleId();
         List<RoleMenuRVO> roleMenu = roleMenuMapper.getRoleMenu(roleId);
 
         //配置

@@ -5,6 +5,7 @@ import com.guozhi.core.TraceLog;
 import com.guozhi.dto.RoleDTO;
 import com.guozhi.service.RoleService;
 import com.guozhi.vo.PageVO;
+import com.guozhi.vo.RoleMenuVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,7 +40,7 @@ public class RoleController {
      */
     @PostMapping("insertRole")
     @TraceLog(module = "权限管理",business = "新增权限列表")
-    public Integer insertRole(RoleDTO roleDTO){
+    public Integer insertRole(@RequestBody RoleDTO roleDTO){
         return roleService.insertRole(roleDTO);
     }
 
@@ -72,14 +73,14 @@ public class RoleController {
      */
     @PostMapping("updateRole")
     @TraceLog(module = "权限管理",business = "修改权限名称、备注")
-    public Integer updateRole(RoleDTO roleDTO){
+    public Integer updateRole(@RequestBody RoleDTO roleDTO){
         return roleService.updateRole(roleDTO);
     }
 
     @PostMapping("setRole")
     @TraceLog(module = "权限管理",business = "修改菜单权限")
-    public Integer setRole(Integer roleId,String menuId){
-        return roleService.setRole(roleId,menuId);
+    public Integer setRole(@RequestBody RoleMenuVO vo){
+        return roleService.setRole(vo);
     }
 
     @GetMapping("getAllRole")

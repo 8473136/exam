@@ -103,7 +103,7 @@
 
         //保存方法
         let save = function (data) {
-            http.post(id == '' ? '/user/addUser' : '/user/updUser', data, true, function (res) {
+            http.post(id == '' ? '/admin/addAdmin' : '/admin/updAdmin', JSON.stringify(data), true, function (res) {
                 if (res.code == 200) {
                     let index = layer.alert('保存成功!', {
                         title: id == '' ? '添加' : '修改' + '信息'
@@ -124,7 +124,7 @@
                 $("#password").hide()
                 $("input[name=password]").prop("disabled","disabled")
                 $("input[name=account]").prop("readonly","readonly")
-                http.get('/user/getUserById', {id: id}, true, function (res) {
+                http.get('/admin/getAdminById', {id: id}, true, function (res) {
                     form.val("addUser", res.data);
                     form.render();
                 })

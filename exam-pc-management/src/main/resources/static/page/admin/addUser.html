@@ -16,18 +16,44 @@
 </head>
 <body>
 <div class="layui-form layuimini-form" lay-filter="addUser">
-
     <div class="layui-form-item">
-        <label class="layui-form-label required">选择权限</label>
+        <label class="layui-form-label required">用户名</label>
         <div class="layui-input-block">
             <input type="hidden" name="id" id="id" value="" class="layui-input">
-            <select name="roleId" id="roleId" lay-verify="required" lay-reqtext="请选择试卷类型">
-                <option value="">请选择</option>
-            </select>
+            <input type="text" name="account" lay-verify="account" lay-reqtext="用户名不能为空" placeholder="请输入用户名"
+                   value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">昵称</label>
+        <div class="layui-input-block">
+            <input type="text" name="nickName" lay-verify="required" lay-reqtext="昵称不能为空" placeholder="请输入昵称"
+                   value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" id="password">
+        <label class="layui-form-label required">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" lay-verify="pass" lay-reqtext="密码不能为空" placeholder="请输入密码"
+                   value="" class="layui-input">
         </div>
     </div>
 
+    <!--    <div class="layui-form-item">-->
+    <!--        <label class="layui-form-label required">部门</label>-->
+    <!--        <div class="layui-input-block">-->
+    <!--            <input type="text" name="startTime" id="startTime" lay-verify="required" lay-reqtext="考试时间不能为空"-->
+    <!--                   placeholder="请选择考试开始时间" class="layui-input">-->
+    <!--        </div>-->
+    <!--    </div>-->
 
+    <div class="layui-form-item">
+        <label class="layui-form-label required">手机号</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" id="phone" lay-verify="required|phone" lay-reqtext="手机号不能为空"
+                   placeholder="请输入手机号" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -51,20 +77,33 @@
 
             //加载试卷类型
         let loadPaperTypeSelect = function () {
-                http.get('/role/getAllRole', null, false, function (res) {
+                http.get('/dict/getDictByParent', {parentId: 1}, false, function (res) {
                     let html = '';
                     for (let i in res.data) {
-                        html += '<option value="' + res.data[i].id + '">' + res.data[i].roleName + '</option>'
+                        html += '<option value="' + res.data[i].id + '">' + res.data[i].dictName + '</option>'
                     }
-                    $("#roleId").append(html)
+                    console.log(html)
+                    $("#paperType").append(html)
                     form.render();//菜单渲染 把内容加载进去
                 })
             }
 
+        //加载多选题算分规则
+        let loadBusinessType = function () {
+            http.get('/dict/getDictByParent', {parentId: 4}, false, function (res) {
+                let html = '';
+                for (let i in res.data) {
+                    html += '<option value="' + res.data[i].id + '">' + res.data[i].dictName + '</option>'
+                }
+                console.log(html)
+                $("#businessType").append(html)
+                form.render();//菜单渲染 把内容加载进去
+            })
+        }
 
         //保存方法
         let save = function (data) {
-            http.post('user/setUserRole', data, false, function (res) {
+            http.post(id == '' ? '/admin/addAdmin' : '/admin/updAdmin', JSON.stringify(data), true, function (res) {
                 if (res.code == 200) {
                     let index = layer.alert('保存成功!', {
                         title: id == '' ? '添加' : '修改' + '信息'
@@ -76,16 +115,16 @@
                     });
                 }
             })
-            console.log(data)
         }
 
         // 加载数据
         let initData = function () {
             if (id != '') {
+                console.log($("#password"))
                 $("#password").hide()
                 $("input[name=password]").prop("disabled","disabled")
                 $("input[name=account]").prop("readonly","readonly")
-                http.get('/user/getUserById', {id: id}, true, function (res) {
+                http.get('/admin/getAdminById', {id: id}, true, function (res) {
                     form.val("addUser", res.data);
                     form.render();
                 })
@@ -95,6 +134,7 @@
 
         initData()
         loadPaperTypeSelect()
+        loadBusinessType()
 
         //自定义验证规则
         form.verify({

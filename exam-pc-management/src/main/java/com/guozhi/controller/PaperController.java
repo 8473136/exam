@@ -24,7 +24,7 @@ public class PaperController {
 
     @PostMapping("addPaper")
     @TraceLog(module = "试卷管理",business = "新增试卷")
-    public Integer addPaper(PaperDTO paperDTO) {
+    public Integer addPaper(@RequestBody PaperDTO paperDTO) {
         return paperService.addPaper(paperDTO);
     }
 
@@ -48,7 +48,7 @@ public class PaperController {
 
     @PostMapping("updatePaper")
     @TraceLog(module = "试卷管理",business = "编辑试卷")
-    public Integer updatePaper(PaperDTO paperDTO){
+    public Integer updatePaper(@RequestBody PaperDTO paperDTO){
         return paperService.updatePaper(paperDTO);
     }
 

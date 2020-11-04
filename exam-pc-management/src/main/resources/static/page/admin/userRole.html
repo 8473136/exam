@@ -15,13 +15,18 @@
     </style>
 </head>
 <body>
-<div class="layui-form layuimini-form" lay-filter="addPaper">
+<div class="layui-form layuimini-form" lay-filter="addUser">
+
     <div class="layui-form-item">
+        <label class="layui-form-label required">选择权限</label>
         <div class="layui-input-block">
             <input type="hidden" name="id" id="id" value="" class="layui-input">
-            <div id="roleList" class="demo-tree-more"></div>
+            <select name="roleId" id="roleId" lay-verify="required" lay-reqtext="请选择试卷类型">
+                <option value="">请选择</option>
+            </select>
         </div>
     </div>
+
 
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -33,60 +38,36 @@
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    layui.use(['form','http','tree', 'util'], function () {
+    layui.use(['form', 'http'], function () {
         /**变-------------------------------量-------------------------------定-------------------------------义*/
         var form = layui.form,
             layer = layui.layer,
             http = layui.http,
-            tree = layui.tree,
             $ = layui.$;
         let id = $('#id').val()
 
         /**方-------------------------------法-------------------------------定-------------------------------义*/
 
-        let initTree = function () {
-            http.get('menu/getMenuTree',{
-                roleId: id
-            },true,function (res) {
-                // 基本演示
-                tree.render({
-                    elem: '#roleList'
-                    ,data: res.data
-                    ,showCheckbox: true  //是否显示复选框
-                    ,id: 'demoId1'
-                });
-            })
-        }
 
-        // 获取选中节点的id
-        function getChecked_list(data) {
-            var id = "";
-            $.each(data, function (index, item) {
-                if (id != "") {
-                    id = id + "," + item.id;
-                }
-                else {
-                    id = item.id;
-                }
-                var i = getChecked_list(item.children);
-                if (i != "") {
-                    id = id + "," + i;
-                }
-            });
-            return id;
-        }
+            //加载试卷类型
+        let loadPaperTypeSelect = function () {
+                http.get('/role/getAllRole', null, false, function (res) {
+                    let html = '';
+                    for (let i in res.data) {
+                        html += '<option value="' + res.data[i].id + '">' + res.data[i].roleName + '</option>'
+                    }
+                    $("#roleId").append(html)
+                    form.render();//菜单渲染 把内容加载进去
+                })
+            }
+
 
         //保存方法
         let save = function (data) {
-            let param = {
-                roleId: id,
-                menuId: getChecked_list(tree.getChecked("demoId1"))
-            }
-
-            http.post('role/setRole',JSON.stringify(param),true,function (res) {
-                if (res.code == 200){
+            http.post('admin/setAdminRole', data, false, function (res) {
+                if (res.code == 200) {
                     let index = layer.alert('保存成功!', {
-                        title: id == '' ? '添加':'修改' + '信息'
+                        title: id == '' ? '添加' : '修改' + '信息'
                     }, function () {
                         // 关闭弹出层
                         layer.close(index);
@@ -95,11 +76,33 @@
                     });
                 }
             })
+            console.log(data)
         }
 
+        // 加载数据
+        let initData = function () {
+            if (id != '') {
+                $("#password").hide()
+                $("input[name=password]").prop("disabled","disabled")
+                $("input[name=account]").prop("readonly","readonly")
+                http.get('/admin/getAdminById', {id: id}, true, function (res) {
+                    form.val("addUser", res.data);
+                    form.render();
+                })
+            }
+        }
         /**事-------------------------------件-------------------------------绑-------------------------------定*/
 
-        initTree()
+        initData()
+        loadPaperTypeSelect()
+
+        //自定义验证规则
+        form.verify({
+            pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+        });
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {

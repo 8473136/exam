@@ -49,7 +49,7 @@
 
         // 保存方法
         let save = function (data) {
-            http.post(id == '' ? '/dict/addDicts': '/dict/updateDict',data,true,function (res) {
+            http.post(id == '' ? '/dict/addDicts': '/dict/updateDict',JSON.stringify(data),true,function (res) {
                 if (res.code == 200){
                     let index = layer.alert('保存成功!', {
                         title: id == '' ? '添加':'修改' + '信息'

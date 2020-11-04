@@ -34,7 +34,7 @@ public class QuestionController {
 
     @PostMapping("addQuestion")
     @TraceLog(module = "题目管理",business = "添加题目")
-    public Integer addQuestion(QuestionVO questionVO){
+    public Integer addQuestion(@RequestBody QuestionVO questionVO){
         return questionService.addQuestion(questionVO);
     }
 
@@ -52,7 +52,7 @@ public class QuestionController {
 
     @PostMapping("updQuestion")
     @TraceLog(module = "题目管理",business = "编辑题目")
-    public Integer updQuestion(QuestionDTO questionDTO){
+    public Integer updQuestion(@RequestBody QuestionDTO questionDTO){
         return questionService.updateQuestion(questionDTO);
     }
 

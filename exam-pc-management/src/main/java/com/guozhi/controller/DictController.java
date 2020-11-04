@@ -27,7 +27,7 @@ public class DictController {
 
     @PostMapping("addDicts")
     @TraceLog(module = "字典管理",business = "新增字典")
-    public Integer addDicts(DictDTO dictDTO){
+    public Integer addDicts(@RequestBody DictDTO dictDTO){
         return dictService.addDicts(dictDTO);
     }
 
@@ -51,7 +51,7 @@ public class DictController {
 
     @PostMapping("updateDict")
     @TraceLog(module = "字典管理",business = "编辑字典")
-    public Integer updateDict(DictDTO dictDTO){
+    public Integer updateDict(@RequestBody DictDTO dictDTO){
         return dictService.updateDict(dictDTO);
     }
 }
