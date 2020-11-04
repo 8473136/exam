@@ -29,7 +29,7 @@
         <log4j.version>1.2.16</log4j.version>
         <lombok.version>1.18.12</lombok.version>
         <fast.json.version>1.2.47</fast.json.version>
-        <tk.mapper.version>4.1.5</tk.mapper.version>
+        <tk.mapper.version>2.1.5</tk.mapper.version>
         <japidocs.version>1.4</japidocs.version>
         <pagehelper.spring.boot.version>1.2.3</pagehelper.spring.boot.version>
         <java.jwt.vetsion>3.7.0</java.jwt.vetsion>
@@ -60,7 +60,7 @@
             <dependency>
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
-                <version>RELEASE</version>
+                <version>${tk.mapper.version}</version>
             </dependency>
             <!--        Mysql驱动-->
             <dependency>

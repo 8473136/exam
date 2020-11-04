@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2020/7/16 14:34
  */
 @Service
-public class AtuchServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService {
 
     @Resource
     private AdminMapper adminMapper;
