@@ -6,51 +6,305 @@
     <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="../../css/public.css" media="all">
     <style>
-        .smallChar {
-            font-size: 12px;
+        .layui-card{
+            /*background-image: linear-gradient(#a8edea,#fed6e3);*/
+            background-color: #f2f5f9;
+        }
+        .header{
+            width: 100%;
+        }
+        .main{
+            margin: 0 auto;
+            width: 70%;
+        }
+        .main > div{
+            float: left;
+            /*height: 500px;*/
+        }
+        .main_left{
+            /*border: black solid 1px;*/
+            box-shadow: 0px 0px 5px #888888;
+            background-color: white;
+            border-radius: 10px;
+            width: 69%;
+            /*padding-bottom: 30px;*/
+        }
+        .main_right{
+            width: 30%;
+            box-shadow: 0px 0px 5px #888888;
+            background-color: white;
+            margin-left: 10px;
+            border-radius: 10px;
+        }
+        .footer{
+            width: 100%;
+            height: 200px;
+            /*background-color: #0000FF;*/
+        }
+        .paper_name{
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+        }
+        .paper_content{
+            text-align: center;
+            font-size: 20px;
+            text-indent: 2em;
+            height: 40px;
+        }
+        .paper_info{
+            height: 40px;
+        }
+        .paper_info > div{
+            height: 40px;
+            line-height: 40px;
+            float: left;
+            width: 50%;
+            text-align: center;
+            font-size: 18px;
+            color: orange;
+        }
+        .question_main{
+            margin: 0 auto;
+            width: 95%;
+            /*height: 400px;*/
+        }
+        .question_title{
+            width: 100%;
+            /*text-indent: 2em;*/
+            /*font-size: 20px;*/
+            line-height: 40px;
+            height: 40px;
         }
 
-        .gz-border {
-            border: 1px solid darkgray;
+        .question_option{
+            margin: 20px auto;
+            width: 100%;
+            /*height: 50px;*/
+            border-radius: 15px;
+            border: black solid 1px;
+            /*background-color: #E3E9C2;*/
+            /*background-image: linear-gradient(to right,#5ee7df,#b490ca);*/
+            /*line-height: 50px;*/
+            /*font-size: 20px;*/
+            text-indent: 2em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .question_button{
+            text-align: center;
+        }
+        .question_button button{
+            width: 50%;
+            /*border-radius: 10px;*/
+            float: left;
+        }
+        .paper_last_time{
+            width: 65%;
+            margin: 0 auto;
+            background-color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .paper_last_time > .last_time_text{
+            font-size: 30px;
+            color: #FF5722;
+        }
+        .paper_last_time > button{
+            margin-top: 20px;
         }
 
-        .gz-exam-size {
-            width: 400px;
-            height: 300px;
+        .question_card{
+            width: 65%;
+            margin: 0 auto;
+            border-radius: 10px;
+            background-color: white;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        .question_card_header i{
+            font-size: 23px;
+        }
+
+        .question_card_header > div{
+            float: left;
+            font-size: 23px;
+        }
+
+        .question_card_header_text{
+            width: 80%;
+        }
+        .question_card_main > button{
+            margin: 10px;
+        }
+        .question_main > div{
+        }
+        .question_title p {
+            display: inline;
+            text-indent: 0em;
+        }
+
+        .question_option p{
+            display: inline;
+        }
+        .question_mark{
+            float: right;
+            color: #36aafd;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .user_info{
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            font-size: 20px;
+        }
+
+        .user_info > div{
+            float: left;
+            height: 30px;
+            margin-top: 30px;
+            line-height: 30px;
+        }
+
+        .user_info_name{
+            width: 50%;
+        }
+
+        .user_info_dept{
+            width: 50%;
+        }
+
+        .last_time{
+            font-size: 20px;
+            margin: 0 auto;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .br_line{
+            margin: 0 auto;
+            width: 50%;
+            border-bottom: 1px solid #dcdcdc;
+        }
+        .answer_card{
+            text-align: center;
+            margin: 0 auto;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .answer_card_prompt{
+            text-align: center;
+            width: 100%;
+            margin: 20px;
+        }
+        .submit_btn{
+            width: 100%;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        #prev{
+            border-bottom-left-radius: 10px;
+
+        }
+        #next{
+            border-bottom-right-radius: 10px;
         }
     </style>
 </head>
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-card">
-        <div class=" layui-card-body">
-            <!--考试题目-->
-            <div class="gz-border gz-exam-size">
-                <div id="questonView"></div>
-            </div>
-            <!--考题选择-->
-            <div class="gz-border"></div>
+        <div class="layui-card-body">
+            <div id="container"></div>
         </div>
     </div>
-
 </div>
 
-<script id="question" type="text/html">
-    <div>
-        {{# layui.each(d.data, function(index, item){ }}
-        <h2 align="center">{{ item.paperName }}</h2>
-        <div>
 
-            <div class="smallChar"><b> {{ item.questionType }} </b>    ({{ item.questionType }}每题为{{ item.questionScore }} 分)</div>
-            <hr/>
-            <div> {{ item.questionName }}</div>
-            {{# layui.each(item.questions, function(index, question){ }}
-            <button type="button" class="layui-btn layui-btn-fluid">{{ String.fromCharCode(index + 65) }}、{{ question.optionContent }}</button>
-            {{# }) }}
+<script id="template" type="text/html">
+    <div class="header" id="header">
+        <h1 class="paper_name">
+            {{d.data.paperName}}
+        </h1>
+        <div class="paper_info">
+            <div>
+                总分: {{d.data.totalScore}}分
+            </div>
+            <div>
+                总题数: {{d.data.questionDTOS.length}}题
+            </div>
+            <br style="clear:both;"/>
         </div>
-
-        {{# }) }}
+        <div class="paper_content">
+            {{d.data.paperContent}}
+        </div>
     </div>
+    <div class="main" id="main">
+        <div class="main_left">
+            <div class="question_main">
+                {{#  layui.each(d.data.questionDTOS, function(index, item){ }}
+                <div class="question" id="question_{{index + 1}}" question_type="{{item.questionType}}" question_id="{{item.id}}">
+                    <div class="question_title">
+                        <span class="layui-badge-rim layui-bg-blue">{{index + 1}}/{{d.data.questionDTOS.length}}</span>
+                        <span class="layui-badge-rim layui-bg-blue">{{item.questionTypeChinese}}</span>
+                        <span>{{item.questionName}}</span>
+                        <span>({{item.questionScore}}分)</span>
+                        <div class="question_mark" id="mark"><img height="20" width="20" src="/images/mark.png">标记</div>
+                    </div>
+                {{#  layui.each(item.options, function(indexO, option){ }}
+                    <div class="question_option" option="{{option.id}}" question_id="{{item.id}}">
+                        {{String.fromCharCode(indexO + 65)}}、{{option.optionContent}}
+                    </div>
+                {{#  }); }}
+                </div>
+                {{#  }); }}
+            </div>
+            <div class="question_button">
+                <button class="layui-btn layui-btn-lg" id="prev">上一题</button>
+                <button class="layui-btn layui-btn-normal layui-btn-lg" id="next" style="margin: 0;">下一题</button>
+            </div>
+            </div>
+        <div class="main_right">
+            <div class="user_info">
+                <div style="width: 100%">考生信息</div>
+                <div class="user_info_name">姓名:张三</div>
+                <div class="user_info_dept">部门：办公室</div>
+                <br style="clear: both"/>
+            </div>
+            <div class="last_time">
+                <img src="/images/last_time.png" width="50" height="50">
+                <div style="margin-top: 30px">总剩余时间</div>
+                <div style="margin-top: 10px;margin-bottom: 10px" id="last_time_text">23:23:23</div>
+            </div>
+            <div class="br_line"></div>
+            <div class="answer_card">
+                <div>答题进度:1/{{d.data.questionDTOS.length}}</div>
+                <div style="margin-top: 20px">答题卡</div>
+                <div class="answer_card_main">
+                    {{#  layui.each(d.data.questionDTOS, function(index, item){ }}
+                    <button type="button" class="layui-btn layui-btn-xs layui-btn-primary select_question" id="select_question_{{index + 1}}" index="{{index + 1}}">{{index + 1}}<span class=""></span></button>
+                    {{#  }); }}
+                </div>
+                <div class="answer_card_prompt">
+                    已做<span class="layui-bg-orange" style="width: 13px;height: 13px;display: inline-block"></span>
+                    未做<span style="width: 13px;height: 13px;display: inline-block;border: 1px solid #dcdcdc;"></span>
+                    标记<span class="layui-bg-blue" style="width: 13px;height: 13px;display: inline-block"></span>
+                </div>
+                <button class="layui-btn layui-bg-orange submit_btn">我要交卷</button>
+            </div>
+        </div>
+        <br style="clear:both;">
+    </div>
+    <div class="footer"></div>
 </script>
 
 </body>
@@ -61,55 +315,198 @@
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 
 <script>
-    layui.use(['table', 'http', 'form', 'laytpl'], function () {
+    layui.use(['table', 'http', 'form', 'laytpl','urlUtils'], function () {
         /**变-------------------------------量-------------------------------定-------------------------------义*/
 
         var table = layui.table,
             http = layui.http,
             form = layui.form,
-            laytpl = layui.laytpl
-        $ = layui.jquery;
+            laytpl = layui.laytpl,
+            urlUtils = layui.urlUtils,
+            $ = layui.jquery;
 
-        let questionHtml = $('#question').html(),
-            questionView = $('#questonView')
-        /**方-------------------------------法-------------------------------定-------------------------------义*/
 
-        let initExamination = function () {
-            $.get('/paper/getPaperById', {id: '5'}, false, function (res) {
-                console.log(res);
-            })
-            let data = {
-                "code": 200,
-                "msg": "OK",
-                "data": [{
-                    "id": 5,
-                    "paperName": "测试卷子",
-                    "paperContent": "",
-                    "questionType": "选择题",
-                    "questionScore": 3,
-                    "paperType": 3,
-                    "startTime": "2020-07-14 00:00:00",
-                    "endTime": "2020-07-31 00:00:00",
-                    "examDuration": 60,
-                    "totalScore": 1.0,
-                    "passScore": 0.6,
-                    "businessType": 6,
-                    "lookScoreTime": "2020-08-26 00:00:00",
-                    "examCount": 1,
-                    "questions": [
-                        {
-                            "optionContent": "这是题目"
-                        }
-                    ]
-                }]
-            }
-            laytpl(questionHtml).render(data, function (html) {
-                questionView.html(html);
-            })
+        function trim(strs){
+            return strs.replace(/(^\s*)|(\s*$)/g,""); //使用js正则表达式方法
         }
 
 
+        let id = undefined, //试卷id
+            currentQuestionNum = 1,// 当前题号
+            totalQuestionNum = 0, //总题数
+            commitQuestion = [] //答案
+
+        let initPaper = function () {
+            // 生成题目数组
+            http.get('/paper/joinPaper',{
+                paperId: 34
+            },true,function (res) {
+                if (res.code == 200) {
+                    let template = $('#template').html(),
+                        dom = $('#container')
+                    laytpl(template).render(res, function (html) {
+                        dom.html(html);
+                    })
+                    // 总题数
+                    totalQuestionNum = res.data.questionDTOS.length
+                    // 生成题目数量固定json
+                    for (let i = 0; i < totalQuestionNum; i++) {
+                        commitQuestion[i] = {};
+                    }
+                    // 隐藏所有题目
+                    $('.question_main .question').hide()
+                    // 展示第一题
+                    $('#question_1').show()
+
+                    // 可以参加考试的毫秒数
+                    // let examDuration = res.data.examDuration * 60 * 1000
+                    let examDuration = 0.5 * 60 * 1000
+
+                    // 默认赋值倒计时一遍
+                    let lefth = Math.floor(examDuration/(1000*60*60)%24),  //计算小时数
+                        leftm = Math.floor(examDuration/(1000*60)%60),  //计算分钟数
+                        lefts = Math.floor(examDuration/1000%60);  //计算秒数
+                    html = '答题剩余时间' + (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
+                    $('#last_time_text').html(html)
+
+                    // 定时器倒计时
+                    setInterval (function () {
+                        let lefth = Math.floor(examDuration/(1000*60*60)%24),  //计算小时数
+                            leftm = Math.floor(examDuration/(1000*60)%60),  //计算分钟数
+                            lefts = Math.floor(examDuration/1000%60);  //计算秒数
+                        html = '答题剩余时间' + (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
+                        examDuration -= 1000;
+                        if (examDuration >= 0){
+                            $('#last_time_text').html(html)
+                            clearInterval(this)
+                        }
+                    }, 1000);  //反
+
+                }
+            })
+        }
+
+        let saveAnswer = function () {
+            let submitAnswer = {
+                userId: '1',
+                paperId: '34',
+                answerVOS: commitQuestion
+            }
+            http.post('/paper/saveAnswer',JSON.stringify(submitAnswer),true,function (res) {
+                console.log(res)
+            })
+        }
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        // 答题卡选择
+        $(document).on('click','.select_question',function () {
+            let index = $(this).attr('index');
+            // 隐藏所有题目
+            $('.question_main .question').hide()
+            // 展示第一题
+            $('#question_' + index).show()
+            currentQuestionNum = index
+            layer.msg('跳转到' + index)
+        })
+
+        // 下一题
+        $(document).on('click','#next',function(){
+            if (currentQuestionNum < (totalQuestionNum)){
+                $('#question_' + currentQuestionNum).hide();
+                $('#question_' + (++ currentQuestionNum)).show();
+            }
+            saveAnswer()
+        });
+
+        // 标记
+        $(document).on('click','#mark',function () {
+            layer.msg('标记')
+            // 标记的class样式
+            let style = 'layui-bg-blue'
+            // 获取dom对象
+            let dom = $('#select_question_' + currentQuestionNum)
+            // 是否包含此样式
+            if (dom.hasClass(style)) {
+                // 包含则移除
+                dom.removeClass(style)
+            }else {
+                // 不包含则添加
+                dom.addClass(style)
+            }
+        })
+
+        // 上一题
+        $(document).on('click','#prev',function(){
+            if (currentQuestionNum > 1){
+                $('#question_' + currentQuestionNum).hide();
+                $('#question_' + (-- currentQuestionNum)).show();
+            }
+        });
+
+        // 点击选项
+        $(document).on('click','.question_option',function(){
+            // 已经答题的样式
+            let style = 'layui-bg-orange'
+            // 答题卡按钮dom
+            let dom = $('#select_question_' + currentQuestionNum)
+            // 题目类型
+            let questionType = $(this).parent().attr('question_type');
+            // 获取点击选项的值
+            let option = $(this).attr('option');
+            // 是否已经选中
+            let check = $(this).attr('check');
+            // 题号
+            let questionId = $(this).attr('question_id');
+            // 答案
+            let answer = []
+            // 已经选中
+            if (check && JSON.parse(check)){
+                // 取消选择
+                $(this).css('backgroundColor','#E3E9C2')
+                $(this).attr('check',false);
+                dom.removeClass(style)
+            }else {
+                // 选择
+                $(this).css('backgroundColor','red')
+                $(this).attr('check',true);
+                dom.addClass(style)
+            }
+
+
+            if (questionType != 'multiple'){
+                let that = this
+                // 清除其他选择
+                $(this).parent().children('.question_option').each(function () {
+                    if ($(this).attr('option') != $(that).attr('option')){
+                        $(this).css('backgroundColor','#E3E9C2')
+                        $(this).attr('check',false)
+                    }
+                })
+            }
+
+            // 获取选择的答案
+            $(this).parent().children('.question_option').each(function () {
+                let optionCheck = $(this).attr('check');
+                if (optionCheck && JSON.parse(optionCheck)){
+                    answer.push($(this).attr('option'))
+                }
+            })
+
+            commitQuestion[currentQuestionNum - 1] = {
+                questionId: questionId, // 题号
+                answer: answer // 选择的答案
+            }
+
+            layer.msg('选择的答案:' + JSON.stringify(commitQuestion))
+        });
+
+        $(document).on('click','.submit_btn',function () {
+            layer.msg('提交答案：' + JSON.stringify(commitQuestion))
+        })
+
         /**事-------------------------------件-------------------------------绑-------------------------------定*/
-        initExamination()
+
+        initPaper()
     })
 </script>

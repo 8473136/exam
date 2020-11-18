@@ -9,12 +9,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>exam-pc</artifactId>
+    <artifactId>package</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.guozhi</groupId>
-            <artifactId>exam-common</artifactId>
+            <artifactId>exam-auto-correct</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.guozhi</groupId>
+            <artifactId>exam-pc</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
+
+
 </project>

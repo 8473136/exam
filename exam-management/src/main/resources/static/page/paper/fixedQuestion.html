@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layui-form layuimini-form" lay-filter="addQuestion">
+        <div class="layuimini-main">
+            <div>
+                <table class="layui-hide" id="question-table" lay-filter="question-table"></table>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">每道试题分数</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" name="questionScore" lay-verify="required|number" lay-reqtext="试卷名称不能为空" placeholder="请输入分数"
+                       value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table','http','form'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            form = layui.form,
+            $ = layui.jquery;
+
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        let renderTable = function () {
+            // 加载表格数据
+            table.render({
+                elem: '#question-table',
+                url: '/question/getQuestionsByPage',
+                title: '题目数据表',
+                page: true,
+                request: {
+                    pageName: 'pageIndex',
+                    limitName: 'pageSize'
+                },
+                response: {
+                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.total,
+                        "data": res.data.list
+                    }
+                },
+                cols: [[
+                    {type: 'checkbox', fixed: 'left'},
+                    {type: 'numbers'},
+                    {field: 'questionName', title: '题目名称'},
+                    {field: 'questionTypeName', title: '题目类型'},
+                    {field: 'questionSource', title: '试题出处'},
+                    {field: 'questionDepotName', title: '题目所属库'},
+                    {field: 'specialIdName', title: '所属专题'},
+                    {field: 'createTime', title: '创建时间'},
+                ]]
+            });
+
+        }
+
+        let save = function (data) {
+            let selectData = table.checkStatus('question-table').data;
+            // 统计每个题型的数量
+            for (let selectDataKey in selectData) {
+                let question = selectData[selectDataKey];
+                question.questionScore = data.questionScore
+                parent.fixedQuestionData.push(question)
+            }
+            // 关闭窗口
+            let iframeIndex = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(iframeIndex);
+
+        }
+
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        renderTable()
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            save(data.field)
+        });
+
+
+    });
+</script>

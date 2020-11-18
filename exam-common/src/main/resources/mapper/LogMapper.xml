@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guozhi.mapper.LogMapper">
+    <select id="getLogsByTime" resultType="com.guozhi.rvo.LogRVO"  parameterType="com.guozhi.vo.LogVO">
+        SELECT
+            d.dict_name log_type,
+            l.exec_method,
+            l.params,
+            l.exec_time,
+            l.module,
+            l.business,
+            l.exec_ip,
+            l.log_content,
+            u.account user_name
+        FROM
+            `tab_sys_log` l
+            LEFT JOIN `tab_sys_admin` u ON l.user_id = u.id
+            LEFT JOIN `tab_sys_dict` d ON l.log_type = d.dict_code
+        WHERE
+            l.is_deleted = 0
+            <if test="logType != null and logType != ''">
+                and l.log_type = #{logType}
+            </if>
+            <if test="module != null and module != ''">
+                and l.module = #{module}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and l.exec_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and l.exec_time <![CDATA[<=]]> #{endTime}
+            </if>
+        ORDER BY l.exec_time DESC
+    </select>
+</mapper>

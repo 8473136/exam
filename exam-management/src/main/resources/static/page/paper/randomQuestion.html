@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+</head>
+<body>
+<div class="layui-form layuimini-form" lay-filter="addPaper">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">试题类型</label>
+        <div class="layui-input-block">
+            <select name="questionType" id="questionType" lay-verify="required" lay-reqtext="请选择多选题算分规则">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">试题专题</label>
+        <div class="layui-input-block">
+            <select name="specialId" id="specialId">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">试题数量</label>
+        <div class="layui-input-block">
+            <input type="number" min="1" name="questionNum" id="questionNum" lay-verify="required|number" value="1"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">每道试题分数</label>
+        <div class="layui-input-inline">
+            <input type="number" min="0" name="questionScore" lay-verify="required|number" lay-reqtext="试卷名称不能为空" placeholder="请输入分数"
+                   value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table','http','form'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            form = layui.form,
+            $ = layui.jquery;
+
+        let questionType = []
+
+        let special = []
+
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+
+        //加载题目类型
+        let loadQuestionType = function() {
+                http.get('/dict/getDictByParent',{parentDictCode: 'TIMULEIXING'},false,function (res) {
+                    questionType = res.data
+                    let html = '';
+                    for (let i in res.data) {
+                        html += '<option value="'+res.data[i].dictCode+'">'+res.data[i].dictName+'</option>'
+                    }
+                    $("#questionType").append(html)
+                    form.render();//菜单渲染 把内容加载进去
+                })
+        }
+
+        //加载考试专题
+        let loadSpecial = function() {
+            http.get('/dict/getDictByParent',{parentDictCode: 'KAOSHIZHUANTI'},false,function (res) {
+                special = res.data
+                let html = '';
+                for (let i in res.data) {
+                    html += '<option value="'+res.data[i].dictCode+'">'+res.data[i].dictName+'</option>'
+                }
+                $("#specialId").append(html)
+                form.render();//菜单渲染 把内容加载进去
+            })
+        }
+
+
+        let save = function (data) {
+            questionType.forEach(item => {
+                if (item.dictCode == data.questionType){
+                    data.questionTypeName = item.dictName
+                }
+            })
+            special.forEach(item => {
+                if (item.dictCode == data.specialId){
+                    data.specialIdName = item.dictName
+                }
+            })
+            parent.randomQUestionData.push(data)
+            // 关闭窗口
+            let iframeIndex = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(iframeIndex);
+        }
+
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        loadQuestionType()
+        loadSpecial()
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            save(data.field)
+        });
+
+
+    });
+</script>

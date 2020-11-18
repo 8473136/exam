@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div>
+            <table class="layui-hide" id="user-table" lay-filter="user-table"></table>
+        </div>
+    </div>
+</div>
+
+<!--  头部工具栏  -->
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addPaper">添加</button>
+    </div>
+</script>
+
+<!-- 操作列 -->
+<script type="text/html" id="operating">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table','http'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            $ = layui.jquery;
+
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        //数据加载方法
+        let renderTable = function () {
+                // 加载表格数据
+                table.render({
+                    elem: '#user-table',
+                    url: '/user/getUserListByPage',
+                    toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
+                    defaultToolbar: ['filter', 'exports', 'print'],
+                    title: '用户数据表',
+                    page: true,
+                    request: {
+                        pageName: 'pageIndex',
+                        limitName: 'pageSize'
+                    },
+                    response: {
+                        statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                    },
+                    parseData: function (res) {
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.total,
+                            "data": res.data.list
+                        }
+                    },
+                    cols: [[
+                        // {type: 'checkbox', fixed: 'left'}
+                        {type: 'numbers'},
+                        {field: 'name', title: '姓名'},
+                        {field: 'createTime', title: '创建时间'},
+                        {templet: '#operating', align: 'center', title: '操作'}
+                    ]]
+                });
+
+            }
+
+        //添加方法
+        let addPaper = function () {
+            layer.open({
+                title: '添加字典',
+                type: 2,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['40%', '50%'],
+                content: './addUser.html',
+                success: function (layero, index) {
+                },
+                end: function () {
+                    renderTable()
+                }
+            });
+        }
+
+        //删除方法
+        let delPaper = function (id) {
+            layer.confirm('真的删除行么', function (index) {
+                http.delete('/user/delete',{id: id},true,function (res) {
+                    if (res.code == 200) {
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        })
+                    } else {
+                        layer.msg(res.msg, {
+                            icon: 2,
+                            time: 2000
+                        })
+                    }
+                    renderTable()
+                })
+                layer.close(index);
+            });
+        }
+
+        // 修改
+        let updPaper = function(id){
+            layer.open({
+                title: '修改用户',
+                type: 2,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['40%', '50%'],
+                content: './addUser.html',
+                success: function (layero, index) {
+                    var body=layer.getChildFrame('body',index);
+                    body.find("#id").val(id);
+                },
+                end: function () {
+                    renderTable()
+                }
+            });
+        }
+
+        //添加方法
+        let setRole = function (id) {
+            layer.open({
+                title: '分配角色',
+                type: 2,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['40%', '50%'],
+                content: './userRole.html',
+                success: function (layero, index) {
+                    var body=layer.getChildFrame('body',index);
+                    body.find("#id").val(id);
+                },
+                end: function () {
+                    renderTable()
+                }
+            });
+        }
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+
+        renderTable()
+
+        //头工具栏事件
+        table.on('toolbar(user-table)', function (obj) {
+            switch (obj.event) {
+                case 'addPaper': addPaper(); break;
+            }
+        })
+
+        //监听行工具事件
+        table.on('tool(user-table)', function (obj) {
+            switch (obj.event) {
+                case 'del': delPaper(obj.data.id); break;
+                case 'edit': updPaper(obj.data.id); break;
+                case 'release':setRole(obj.data.id);break;
+            }
+        })
+    });
+</script>

@@ -28,5 +28,5 @@ layui.config({
     wangEditor: 'wangEditor/wangEditor', // wangEditor富文本扩展
     layarea: 'layarea/layarea', //  省市县区三级联动下拉选择器
     http: 'request/http', //  请求封装
-    urlUtils: 'utils/urlUtils', //  获取url参数
+    strpy: 'str/strpy', //  汉字转拼音
 });

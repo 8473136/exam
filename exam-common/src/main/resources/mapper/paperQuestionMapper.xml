@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guozhi.mapper.PaperQuestionMapper">
+    <select id="selectPaperQuestion" resultType="com.guozhi.rvo.JoinQuestionRVO">
+    SELECT
+        q.*,
+        d.dict_name question_type_chinese,
+       qn.question_score
+    FROM
+        tab_exam_paper_questions pq
+        INNER JOIN tab_exam_questions q ON pq.question_id = q.id
+        INNER JOIN tab_sys_dict d ON q.question_type = d.dict_code
+        LEFT JOIN tab_exam_questions_number qn ON q.question_type = qn.question_type AND qn.paper_id = pq.paper_id
+    WHERE pq.paper_id = #{paperId}
+    </select>
+
+</mapper>
