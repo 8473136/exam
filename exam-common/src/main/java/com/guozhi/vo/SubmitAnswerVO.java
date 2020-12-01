@@ -17,4 +17,8 @@ public class SubmitAnswerVO {
     private Integer paperId;
     // 提交的题目
     private List<QuestionAnswerVO> answerVOS;
+    // 0提前交卷 1自动交卷
+    private Integer commitType;
+    // 剩余考试时间（分钟）
+    private Double examTime;
 }

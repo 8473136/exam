@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <description>打包模块</description>
     <artifactId>package</artifactId>
 
     <dependencies>
@@ -20,6 +20,11 @@
         <dependency>
             <groupId>com.guozhi</groupId>
             <artifactId>exam-pc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.guozhi</groupId>
+            <artifactId>exam-management</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

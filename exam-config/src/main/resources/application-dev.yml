@@ -54,7 +54,7 @@ spring:
   # redis配置
   redis:
     # redis地址
-    host: 192.168.0.121
+    host: 192.168.0.116
     # redis端口
     port: 6379
     # redis库
@@ -83,10 +83,19 @@ spring:
       enabled: true
   # rabbitMq配置
   rabbitmq:
-    host: 192.168.0.103
+    host: 192.168.0.116
     port: 5672
     username: admin
     password: admin
+    listener:
+      simple:
+        acknowledge-mode: manual
+        default-requeue-rejected: true #意思是，消息被拒后（即未消费），重新（true）放入队列
+        retry:
+          enabled: true # 是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
+          max-attempts: 5 # 重试次数
+          initial-interval: 5000
+    # 改卷交换机
     correctPaper:
       queue: correctPaperQueue
       exchange: correctPaperExchange
@@ -108,4 +117,4 @@ pagehelper:
 auth:
   Login:
     #不拦截的请求 逗号隔开
-    NotInterception: "/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/auth/login,/auth/refreshToken,/**/*.ico,/error,/template/**,/webjars/**,/service-worker.js,/swagger-resources/**,/precache-manifest.eea302037a9c2783bdf341d6c2dd2ca2.js,/manifest.json,/robots.txt"
+    NotInterception: "/pc/**,/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/ExamNow/**,/management/**/*.html,/management/**/*.css,/management/**/*.js,/management/lib/**,/management/images/**,/management/auth/login,/management/auth/refreshToken,/**/*.ico,/error,/template/**,/webjars/**,/service-worker.js,/swagger-resources/**,/precache-manifest.eea302037a9c2783bdf341d6c2dd2ca2.js,/manifest.json,/robots.txt"

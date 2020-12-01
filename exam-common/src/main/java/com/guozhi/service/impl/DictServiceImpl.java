@@ -1,10 +1,10 @@
 package com.guozhi.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.guozhi.common.DataGlobalVariable;
 import com.guozhi.dto.DictDTO;
 import com.guozhi.mapper.DictMapper;
 import com.guozhi.service.DictService;
-import com.guozhi.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -83,7 +83,7 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public Integer updateDict(DictDTO dictDTO) {
-        dictDTO.setUpdateTime(DateUtils.currentDateTime());
+        dictDTO.setUpdateTime(DateUtil.now());
         return dictMapper.updateByPrimaryKeySelective(dictDTO);
     }
 }

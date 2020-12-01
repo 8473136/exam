@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        .smallGrayChar {
+            font-size: 12px;
+            color: darkgray;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .paper_list {
+            width: 95%;
+            border-collapse: separate;
+            margin: 0 auto;
+            border-spacing: 0px 15px;
+        }
+
+        .paper_list_row {
+            height: 150px;
+            background-color: #B4D1E1;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .paper_icon {
+            border-bottom-left-radius: 20px;
+            border-top-left-radius: 20px;
+        }
+
+        .paper_status {
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+
+        #paper_list{
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <ul class="layui-nav">
+        <li class="layui-nav-item">
+            <a href="">在线考试<span class="layui-badge">9</span></a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="">个人中心<span class="layui-badge-dot"></span></a>
+        </li>
+        <li class="layui-nav-item" lay-unselect="" style="float: right;margin-right: 20px">
+            <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">修改信息</a></dd>
+                <dd><a href="javascript:;">安全管理</a></dd>
+                <dd><a href="javascript:;">退了</a></dd>
+            </dl>
+        </li>
+    </ul>
+</header>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div id="paper_list"></div>
+    </div>
+</div>
+
+<script id="paper_list_template" type="text/html">
+    <table class="paper_list">
+        {{#  layui.each(d.data, function(index, item){ }}
+        <tr class="paper_list_row">
+            <td width="120px" class="paper_icon">
+                <img src="../../images/考试.png" width="80px" height="80px" style="margin-left: 20px">
+            </td>
+            <td height="150px">
+                <h2>{{item.paperName}}</h2>
+                <p>{{item.paperContent}}</p>
+                <p>总分：{{item.totalScore}} 题数：{{item.questionNum}}</p>
+                <p>开始时间：{{item.startTime}} 结束时间：{{item.endTime}}</p>
+            </td>
+            <td class="paper_status">
+                {{# if (item.examStatus == 0) { }}
+                <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
+                {{# } else if (item.examStatus == 1  && item.remainingCount > 0) { }}
+                <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
+                <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
+                {{# } else { }}
+                <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
+                {{# } }}
+            </td>
+        </tr>
+        {{#  }); }}
+    </table>
+</script>
+
+</body>
+</html>
+
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+    layui.use(['table', 'http', 'form', 'laytpl', 'element'], function () {
+        /**变-------------------------------量-------------------------------定-------------------------------义*/
+
+        var table = layui.table,
+            http = layui.http,
+            form = layui.form,
+            laytpl = layui.laytpl
+        $ = layui.jquery;
+
+        let listTemplate = $('#paper_list_template').html(),
+            listView = $('#paper_list')
+        /**方-------------------------------法-------------------------------定-------------------------------义*/
+
+        let initExamination = function () {
+            http.get('pc/paper/getUserPaper', {userId: '3'}, false, function (res) {
+                console.log(res)
+                laytpl(listTemplate).render(res, function (html) {
+                    listView.html(html);
+                })
+            })
+        }
+
+        let autoHeight = function() {
+            $('#paper_list').height($(window).height() - 82);
+        }
+
+        autoHeight()
+
+        /**事-------------------------------件-------------------------------绑-------------------------------定*/
+        $(document).on('click','.takePaper',function () {
+            let paperId = $(this).attr('id');
+            layer.msg('参加考试' + paperId)
+            window.location.replace('./examinationPaper.html?id=' + paperId)
+        })
+
+        initExamination()
+    })
+</script>

@@ -18,9 +18,6 @@ public class PaperUserDTO extends BaseDTO{
     // 用户id
     private Integer userId;
 
-    // 用户得分
-    private Double score;
-
     // 考试状态 0未考试1提前交卷2自动交卷
     private Integer examStatus;
 }

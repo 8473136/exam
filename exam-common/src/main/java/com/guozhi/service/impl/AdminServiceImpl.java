@@ -1,12 +1,12 @@
 package com.guozhi.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.common.DataGlobalVariable;
 import com.guozhi.dto.AdminDTO;
 import com.guozhi.mapper.AdminMapper;
 import com.guozhi.service.AdminService;
-import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.utils.MD5Utils;
 import com.guozhi.utils.UUIDUtils;
@@ -39,7 +39,7 @@ public class AdminServiceImpl implements AdminService {
         AdminDTO adminDTO = new AdminDTO();
         adminDTO.setIsDeleted(DataGlobalVariable.IS_DELETE);
         adminDTO.setId(id);
-        adminDTO.setUpdateTime(DateUtils.currentDateTime());
+        adminDTO.setUpdateTime(DateUtil.now());
         adminDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return adminMapper.updateByPrimaryKeySelective(adminDTO);
     }
@@ -47,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer updAdmin(AdminDTO adminDTO) {
         adminDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        adminDTO.setUpdateTime(DateUtils.currentDateTime());
+        adminDTO.setUpdateTime(DateUtil.now());
         return adminMapper.updateByPrimaryKeySelective(adminDTO);
     }
 
@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer setAdminRole(AdminDTO adminDTO) {
         adminDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        adminDTO.setUpdateTime(DateUtils.currentDateTime());
+        adminDTO.setUpdateTime(DateUtil.now());
         return adminMapper.updateByPrimaryKeySelective(adminDTO);
     }
 }

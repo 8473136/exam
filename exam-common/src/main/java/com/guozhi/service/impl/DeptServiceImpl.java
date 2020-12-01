@@ -1,5 +1,6 @@
 package com.guozhi.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
@@ -7,7 +8,6 @@ import com.guozhi.common.DataGlobalVariable;
 import com.guozhi.dto.DeptDTO;
 import com.guozhi.mapper.DeptMapper;
 import com.guozhi.service.DeptService;
-import com.guozhi.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -70,7 +70,7 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public Integer updateDept(DeptDTO deptDTO) {
-        deptDTO.setUpdateTime(DateUtils.currentDateTime());
+        deptDTO.setUpdateTime(DateUtil.now());
         return deptMapper.updateByPrimaryKeySelective(deptDTO);
     }
 

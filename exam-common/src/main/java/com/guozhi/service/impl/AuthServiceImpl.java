@@ -71,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
 
         String accessToken = JwtUtils.createToken(jwtPayload, 2 * 60 * 1000L);
         String refreshToken = UUIDUtils.ramdomUUID();
-
         return new LoginRVO(accessToken,refreshToken,System.currentTimeMillis());
     }
 
@@ -83,6 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public InitialHomeRVO getLoginMenus() {
+
         InitialHomeRVO initialHomeRVO = new InitialHomeRVO();
         // 设置首页信息
         initialHomeRVO.getHomeInfo().put("title","首页");
@@ -104,7 +104,6 @@ public class AuthServiceImpl implements AuthService {
         treeNodeConfig.setChildrenKey("child");
         // 最大递归深度
         treeNodeConfig.setDeep(100);
-
         //转换器
         List<Tree<String>> treeNodes = TreeUtil.build(roleMenu, "-1", treeNodeConfig,
                 (treeNode, tree) -> {
@@ -119,4 +118,5 @@ public class AuthServiceImpl implements AuthService {
 //        return list;
         return initialHomeRVO;
     }
+
 }

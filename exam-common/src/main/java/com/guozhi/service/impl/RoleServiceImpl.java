@@ -1,5 +1,6 @@
 package com.guozhi.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.guozhi.common.DataGlobalVariable;
@@ -8,7 +9,6 @@ import com.guozhi.dto.RoleMenuDTO;
 import com.guozhi.mapper.RoleMapper;
 import com.guozhi.mapper.RoleMenuMapper;
 import com.guozhi.service.RoleService;
-import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.vo.PageVO;
 import com.guozhi.vo.RoleMenuVO;
@@ -50,7 +50,7 @@ public class RoleServiceImpl implements RoleService {
     public Integer deleteRole(Integer id) {
         RoleDTO roleDTO = roleMapper.selectByPrimaryKey(id);
         roleDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        roleDTO.setUpdateTime(DateUtils.currentDateTime());
+        roleDTO.setUpdateTime(DateUtil.now());
         roleDTO.setIsDeleted(DataGlobalVariable.IS_DELETE);
         return roleMapper.updateByPrimaryKeySelective(roleDTO);
     }
@@ -63,7 +63,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Integer updateRole(RoleDTO roleDTO) {
         roleDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        roleDTO.setUpdateTime(DateUtils.currentDateTime());
+        roleDTO.setUpdateTime(DateUtil.now());
         return roleMapper.updateByPrimaryKeySelective(roleDTO);
     }
 

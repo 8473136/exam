@@ -12,6 +12,7 @@
         INNER JOIN tab_sys_dict d ON q.question_type = d.dict_code
         LEFT JOIN tab_exam_questions_number qn ON q.question_type = qn.question_type AND qn.paper_id = pq.paper_id
     WHERE pq.paper_id = #{paperId}
+    AND q.is_deleted = 0 AND qn.is_deleted = 0 AND d.is_deleted = 0
     </select>
 
 </mapper>

@@ -33,7 +33,7 @@ public class WebLogAspect {
     /**
      * 切入点
      */
-    public static final String POINTCUT = "execution(* com.guozhi.controller..*Controller.*(..))";
+    public static final String POINTCUT = "execution(* com.guozhi.controller..Management*Controller.*(..))";
 
     @Resource
     private LogMapper logMapper;

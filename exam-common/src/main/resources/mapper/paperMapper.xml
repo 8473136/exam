@@ -22,8 +22,10 @@
     <select id="getUserPaper" resultType="com.guozhi.rvo.UserPaperRVO" parameterType="integer">
         SELECT
             p.*,
-            pu.score,
-            pu.exam_status
+            pu.exam_status,
+            (select Max(score) from tab_exam_correct_paper where paper_user_id = pu.id ) score,
+            p.exam_count - (select count(id) from tab_exam_submit_paper where paper_id = p.id and user_id = pu.user_id) remaining_count,
+            (select count(id) from tab_exam_paper_questions where paper_id = p.id) question_num
         FROM
             `tab_exam_paper` p
             LEFT JOIN `tab_exam_paper_user` pu ON p.id = pu.paper_id

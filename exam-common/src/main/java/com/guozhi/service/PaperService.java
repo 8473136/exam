@@ -1,6 +1,8 @@
 package com.guozhi.service;
 
 import com.github.pagehelper.PageInfo;
+import com.guozhi.core.BusinessException;
+import com.guozhi.core.Result;
 import com.guozhi.dto.PaperDTO;
 import com.guozhi.rvo.JoinPaperRVO;
 import com.guozhi.rvo.PaperRVO;
@@ -80,12 +82,20 @@ public interface PaperService {
      * @author LiuChangLan
      * @since 2020/11/12 11:39
      */
-    JoinPaperRVO joinPaper(Integer id);
+    JoinPaperRVO joinPaper(Integer paperId,Integer userId);
 
     /**
      * @description 保存当前选择的题目
      * @author LiuChangLan
      * @since 2020/11/18 13:20
+     * @return
      */
-    void saveAnswer(SubmitAnswerVO submitAnswerVO);
+    Result saveAnswer(SubmitAnswerVO submitAnswerVO) throws BusinessException;
+
+    /**
+     * @description 提交试卷接口
+     * @author LiuChangLan
+     * @since 2020/11/18 17:33
+     */
+    Result submitPaper(SubmitAnswerVO submitAnswerVO) throws BusinessException;
 }

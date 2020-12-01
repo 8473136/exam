@@ -25,12 +25,10 @@ public class GlobalExceptionHandler {
             result.setCode(businessException.getErrorCode());
             result.setMsg(businessException.getErrorMsg());
         }else if (e instanceof HttpRequestMethodNotSupportedException){
-            result.setCode(ResultStatusCode.METHOD_TYPE_EXCEPTION.getCode());
-            result.setMsg(ResultStatusCode.METHOD_TYPE_EXCEPTION.getMsg());
+            result = new Result(ResultStatusCode.METHOD_TYPE_EXCEPTION);
         }
         else {
-            result.setCode(ResultStatusCode.SERVER_ERROR.getCode());
-            result.setMsg(ResultStatusCode.SERVER_ERROR.getMsg());
+            result = new Result(ResultStatusCode.SERVER_ERROR);
         }
         return result;
     }

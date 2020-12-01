@@ -14,6 +14,12 @@ public class UserPaperRVO extends PaperDTO {
     // 用户得分
     private Double score;
 
-    // 考试状态 0未考试1提前交卷2自动交卷
+    // 考试状态 0未考试1已经考试
     private Integer examStatus;
+
+    // 考试题目
+    private Integer questionNum;
+
+    // 剩余考试次数
+    private Integer remainingCount;
 }

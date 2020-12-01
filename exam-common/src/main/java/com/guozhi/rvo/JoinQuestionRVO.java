@@ -1,7 +1,6 @@
 package com.guozhi.rvo;
 
 import com.guozhi.dto.QuestionDTO;
-import com.guozhi.dto.QuestionsOptionDTO;
 import lombok.Data;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 @Data
 public class JoinQuestionRVO extends QuestionDTO {
     // 选项
-    private List<QuestionsOptionDTO> options;
+    private List<JoinOptionRVO> options;
     // 题目类型（中文）
     private String questionTypeChinese;
     // 题目分数

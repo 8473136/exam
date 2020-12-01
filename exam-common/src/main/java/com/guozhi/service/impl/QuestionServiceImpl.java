@@ -1,5 +1,6 @@
 package com.guozhi.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -12,7 +13,6 @@ import com.guozhi.mapper.QuestionMapper;
 import com.guozhi.mapper.QuestionOptionMapper;
 import com.guozhi.rvo.QuestionRVO;
 import com.guozhi.service.QuestionService;
-import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
 import com.guozhi.utils.UUIDUtils;
 import com.guozhi.vo.PageVO;
@@ -72,7 +72,7 @@ public class QuestionServiceImpl implements QuestionService {
     public Integer deleteQuestion(Integer id) {
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(id);
-        questionDTO.setUpdateTime(DateUtils.currentDateTime());
+        questionDTO.setUpdateTime(DateUtil.now());
         questionDTO.setIsDeleted(DataGlobalVariable.IS_DELETE);
         questionDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return questionMapper.updateByPrimaryKeySelective(questionDTO);
@@ -80,7 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Integer updateQuestion(QuestionDTO questionDTO) {
-        questionDTO.setUpdateTime(DateUtils.currentDateTime());
+        questionDTO.setUpdateTime(DateUtil.now());
         questionDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return questionMapper.updateByPrimaryKeySelective(questionDTO);
     }

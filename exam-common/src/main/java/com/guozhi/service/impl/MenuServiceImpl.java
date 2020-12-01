@@ -1,6 +1,7 @@
 package com.guozhi.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
@@ -11,7 +12,6 @@ import com.guozhi.mapper.MenuMapper;
 import com.guozhi.mapper.RoleMenuMapper;
 import com.guozhi.rvo.RoleMenuRVO;
 import com.guozhi.service.MenuService;
-import com.guozhi.utils.DateUtils;
 import com.guozhi.utils.JwtUtils;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
     public Integer deleteMenu(Integer id) {
         MenuDTO menuDTO = menuMapper.selectByPrimaryKey(id);
         menuDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
-        menuDTO.setUpdateTime(DateUtils.currentDateTime());
+        menuDTO.setUpdateTime(DateUtil.now());
         menuDTO.setIsDeleted(DataGlobalVariable.IS_DELETE);
         return menuMapper.updateByPrimaryKeySelective(menuDTO);
     }
@@ -60,7 +60,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Integer updateMenu(MenuDTO menuDTO) {
-        menuDTO.setUpdateTime(DateUtils.currentDateTime());
+        menuDTO.setUpdateTime(DateUtil.now());
         menuDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
         return menuMapper.updateByPrimaryKeySelective(menuDTO);
     }

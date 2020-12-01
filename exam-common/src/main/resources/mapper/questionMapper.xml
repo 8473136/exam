@@ -15,4 +15,14 @@
             `tab_exam_questions` q
         WHERE q.is_deleted = 0
     </select>
+
+    <select id="getQuestionAnswer" resultType="com.guozhi.rvo.QuestionAnswer">
+        SELECT
+            q.*,
+            ( SELECT GROUP_CONCAT( id ) FROM tab_exam_questions_option WHERE question_id = q.id AND is_deleted = 0 AND is_right_key = 0 ) answers
+        FROM
+            tab_exam_questions q
+        WHERE
+            q.is_deleted = 0
+    </select>
 </mapper>
