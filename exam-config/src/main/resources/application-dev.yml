@@ -54,7 +54,7 @@ spring:
   # redis配置
   redis:
     # redis地址
-    host: 192.168.0.116
+    host: 192.168.0.106
     # redis端口
     port: 6379
     # redis库
@@ -83,7 +83,7 @@ spring:
       enabled: true
   # rabbitMq配置
   rabbitmq:
-    host: 192.168.0.116
+    host: 192.168.0.106
     port: 5672
     username: admin
     password: admin
@@ -117,4 +117,4 @@ pagehelper:
 auth:
   Login:
     #不拦截的请求 逗号隔开
-    NotInterception: "/pc/**,/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/ExamNow/**,/management/**/*.html,/management/**/*.css,/management/**/*.js,/management/lib/**,/management/images/**,/management/auth/login,/management/auth/refreshToken,/**/*.ico,/error,/template/**,/webjars/**,/service-worker.js,/swagger-resources/**,/precache-manifest.eea302037a9c2783bdf341d6c2dd2ca2.js,/manifest.json,/robots.txt"
+    NotInterception: "/pc/**,/images/**,/lib/**,/*.html,/css/**,/js/**,/page/**,/api/**,/ExamNow/**,/management/**/*.html,/management/**/*.css,/management/**/*.js,/management/lib/**,/management/images/**,/management/auth/login,/management/auth/refreshToken,/**/*.ico,/error,/**/template/**,/webjars/**,/service-worker.js,/swagger-resources/**,/precache-manifest.eea302037a9c2783bdf341d6c2dd2ca2.js,/manifest.json,/robots.txt"

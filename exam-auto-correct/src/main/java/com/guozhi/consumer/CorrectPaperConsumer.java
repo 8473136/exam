@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 改卷队列消费者
@@ -72,9 +73,6 @@ public class CorrectPaperConsumer {
             CorrectPaperVO correctPaperVO = this.correctPaper(submitAnswerVO);
             // 计算总分
             Double allScore = this.calcScore(correctPaperVO);
-            // 改卷信息、分数入库
-
-
             // 查询用户和试卷关系表id 后面用
             PaperUserDTO paperUserParamDTO = new PaperUserDTO();
             paperUserParamDTO.setUserId(submitAnswerVO.getUserId());
@@ -87,8 +85,8 @@ public class CorrectPaperConsumer {
             correctPaperDTO.setSubmitId(submitPaperDTO.getId());
             correctPaperDTO.setCorrectPaperAllJson(JSON.toJSONString(correctPaperVO));
             correctPaperDTO.setPaperUserId(paperUserDTO.getId());
+            // 改卷信息、分数入库
             correctPaperMapper.insertSelective(correctPaperDTO);
-
             // 修改为改卷成功
             submitPaperDTO.setCorrectPaperStatus(DataGlobalVariable.CORRECT_PAPER_STATUS_CORRECTING_END);
             submitPaperMapper.updateByPrimaryKeySelective(submitPaperDTO);
@@ -136,40 +134,75 @@ public class CorrectPaperConsumer {
                     // 题目id
                     correctQuestionVO.setQuestionId(submitQuestion.getQuestionId());
                     // 提交的答案
-                    List<Integer> submitAnswer = submitQuestion.getAnswer();
+                    List<Object> submitAnswer = submitQuestion.getAnswer();
                     correctQuestionVO.setAnswers(submitAnswer);
-                    // 排序
-                    Collections.sort(submitAnswer);
-                    // 提交的答案字符串
-                    String submitAnswerStr = CollectionUtil.join(submitAnswer,",");
-                    // 正确答案字符串
-                    String answersStr = answer.getAnswers();
-                    // 判断答案是否正确
-                    if (submitAnswerStr.equals(answersStr)){
-                        // 正确
-                        correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_CORRECT);
-                    }else {
-                        //不正确
-                        if (DataGlobalVariable.MULTIPLE_QUESTION_DICT_CODE.equals(answer.getQuestionType())){
-                            // 多选题 不全对
-                            // 正确答案集合
-                            List<String> answerLists = Arrays.asList(answersStr.trim().split(","));
-                            // 统计正确数量
-                            Integer isRightKeyNum = 0;
-                            for (String answerItem : answerLists) {
-                                for (Integer submitItem : submitAnswer) {
-                                    // 某一个选择正确
-                                    if (Integer.parseInt(answerItem) == submitItem){
+                    // 填空题
+                    if ((DataGlobalVariable.FILL_QUESTION_DICT_CODE.equals(answer.getQuestionType()))) {
+                        // 转换提交的答案
+                        List<CorrectPaperFillBlackDTO> fillBlackDTOS = submitAnswer.stream().map(item -> JSON.parseObject(JSON.toJSONString(item), CorrectPaperFillBlackDTO.class)).collect(Collectors.toList());
+                        // 统计正确数量
+                        Integer isRightKeyNum = 0;
+                        correct: for (CorrectPaperFillBlackDTO fillBlackDTO : fillBlackDTOS) {
+                            for (CorrectPaperFillBlackDTO correctPaperFillBlackDTO : answer.getCorrectPaperFillBlackDTOS()) {
+                                // 找到同一个选项
+                                if (fillBlackDTO.getOptionId().equals(correctPaperFillBlackDTO.getOptionId())){
+                                    // 答案正确
+                                    if (fillBlackDTO.getValue().trim().equals(correctPaperFillBlackDTO.getValue().trim())){
                                         isRightKeyNum ++;
+                                        continue correct;
                                     }
                                 }
                             }
+                        }
+                        if (isRightKeyNum == answer.getCorrectPaperFillBlackDTOS().size()){
+                            // 答案完全正确
+                            correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_CORRECT);
+                        }else if(isRightKeyNum > 0){
+                            // 半对
                             // 设置正确选项数
                             correctQuestionVO.setIsRightKeyNum(isRightKeyNum);
                             correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_HALF_PAIR);
                         }else {
-                            // 其他题 不正确
+                            // 全错
                             correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_WRONG);
+                        }
+                    }else {
+                        // 其他题目（单选 多选 判断）
+                        // 转换成integr类型 后面排序 改卷用
+                        List<Integer> submitAnswerInt = submitAnswer.stream().map(item -> Integer.parseInt(String.valueOf(item))).collect(Collectors.toList());
+                        // 排序
+                        Collections.sort(submitAnswerInt);
+                        // 提交的答案字符串
+                        String submitAnswerStr = CollectionUtil.join(submitAnswer,",");
+                        // 正确答案字符串
+                        String answersStr = answer.getAnswers();
+                        // 判断答案是否正确
+                        if (submitAnswerStr.equals(answersStr)){
+                            // 正确
+                            correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_CORRECT);
+                        }else {
+                            //不正确
+                            if (DataGlobalVariable.MULTIPLE_QUESTION_DICT_CODE.equals(answer.getQuestionType())){
+                                // 多选题 不全对
+                                // 正确答案集合
+                                List<String> answerLists = Arrays.asList(answersStr.trim().split(","));
+                                // 统计正确数量
+                                Integer isRightKeyNum = 0;
+                                for (String answerItem : answerLists) {
+                                    for (Integer submitItem : submitAnswerInt) {
+                                        // 某一个选择正确
+                                        if (Integer.parseInt(answerItem) == submitItem){
+                                            isRightKeyNum ++;
+                                        }
+                                    }
+                                }
+                                // 设置正确选项数
+                                correctQuestionVO.setIsRightKeyNum(isRightKeyNum);
+                                correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_HALF_PAIR);
+                            }else {
+                                // 其他题 不正确
+                                correctQuestionVO.setIsRightKey(DataGlobalVariable.QUESTION_ANSWER_WRONG);
+                            }
                         }
                     }
                     correctQuestionVOS.add(correctQuestionVO);
@@ -213,4 +246,7 @@ public class CorrectPaperConsumer {
         }
         return allScore;
     }
+
+
+
 }

@@ -14,5 +14,5 @@ public class QuestionAnswerVO {
     // 题目id
     private Integer questionId;
     // 提交的答案id集合
-    private List<Integer> answer;
+    private List<Object> answer;
 }

@@ -62,9 +62,9 @@ public class ManagementQuestionController {
         return questionService.analyzeQuestion(file);
     }
 
-    @PostMapping("importQuestion")
+    @GetMapping("importQuestion")
     @TraceLog(module = "题目管理",business = "导入题目")
-    public void importQuestion(String uuid){
+    public void importQuestion(@RequestParam String uuid){
         questionService.importQuestion(uuid);
     }
 

@@ -16,7 +16,7 @@
         WHERE q.is_deleted = 0
     </select>
 
-    <select id="getQuestionAnswer" resultType="com.guozhi.rvo.QuestionAnswer">
+    <select id="getQuestionAnswer" resultMap="TianKong">
         SELECT
             q.*,
             ( SELECT GROUP_CONCAT( id ) FROM tab_exam_questions_option WHERE question_id = q.id AND is_deleted = 0 AND is_right_key = 0 ) answers
@@ -25,4 +25,27 @@
         WHERE
             q.is_deleted = 0
     </select>
+
+    <resultMap id="TianKong" type="com.guozhi.rvo.QuestionAnswer">
+
+        <result property="id" column="id"/>
+        <result property="questionName" column="question_name"/>
+        <result property="questionType" column="question_type"/>
+        <result property="parentQuestionId" column="parent_question_id"/>
+        <result property="questionSource" column="question_source"/>
+        <result property="questionDepot" column="question_depot"/>
+        <result property="specialId" column="special_id"/>
+        <result property="questionAnalysis" column="question_analysis"/>
+
+        <collection property="correctPaperFillBlackDTOS" ofType="com.guozhi.dto.CorrectPaperFillBlackDTO" select="getCorrectPaperFileBlackDTOS" column="id">
+            <id column="optionId" property="optionId"/>
+            <result column="value" property="value"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="getCorrectPaperFileBlackDTOS" resultType="com.guozhi.dto.CorrectPaperFillBlackDTO">
+        select id optionId,option_content `value` from tab_exam_questions_option where question_id = #{id}
+    </select>
+
 </mapper>

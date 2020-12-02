@@ -15,7 +15,6 @@ import com.guozhi.mapper.*;
 import com.guozhi.rvo.*;
 import com.guozhi.service.PaperService;
 import com.guozhi.utils.JwtUtils;
-import com.guozhi.utils.PaperUtils;
 import com.guozhi.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -207,13 +206,13 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public List<UserPaperRVO> getUserPaper(Integer userId) {
         List<UserPaperRVO> userPaper = paperMapper.getUserPaper(userId);
-        List<UserPaperRVO> result = new ArrayList<>();
-        for (UserPaperRVO userPaperRVO : userPaper) {
-            if (PaperUtils.isNormalExamTime(userPaperRVO)){
-                result.add(userPaperRVO);
-            }
-        }
-        return result;
+//        List<UserPaperRVO> result = new ArrayList<>();
+//        for (UserPaperRVO userPaperRVO : userPaper) {
+//            if (PaperUtils.isNormalExamTime(userPaperRVO)){
+//                result.add(userPaperRVO);
+//            }
+//        }
+        return userPaper;
     }
 
 
@@ -236,6 +235,14 @@ public class PaperServiceImpl implements PaperService {
             insertDTO.setExamStatus(0);
             insertCount += paperUserMapper.insertSelective(insertDTO);
         }
+
+        PaperDTO paperDTO = new PaperDTO();
+        paperDTO.setId(vo.getId());
+        paperDTO.setUpdateTime(DateUtil.now());
+        paperDTO.setUpdatedBy(JwtUtils.getCurrentUserJwtPayload().getId());
+        paperDTO.setPaperStatus(DataGlobalVariable.PAPER_STATUS_PUBLISHED); // 试卷状态 改为已发布
+        paperMapper.updateByPrimaryKeySelective(paperDTO);
+
         return insertCount;
     }
 
@@ -278,15 +285,22 @@ public class PaperServiceImpl implements PaperService {
             for (QuestionsOptionDTO option : opstions) {
                 JoinOptionRVO joinOptionRVO = BeanUtil.copyProperties(option, JoinOptionRVO.class);
                 List<Integer> answer = new ArrayList<>();
-                if (submitAnswerVO != null){
-                    answer = submitAnswerVO.getAnswerVOS().get(submitAnswerIndex).getAnswer();
-                }
-                if (answer != null && answer.size() > 0){
-                    if (answer.contains(joinOptionRVO.getId())){
-                        joinOptionRVO.setCheck(true);
-                    }else {
-                        joinOptionRVO.setCheck(false);
+                if (!DataGlobalVariable.FILL_QUESTION_DICT_CODE.equals(questionsDTO.getQuestionType())) {
+                    // 非填空题
+                    if (submitAnswerVO != null) {
+
+                        answer = submitAnswerVO.getAnswerVOS().get(submitAnswerIndex).getAnswer().stream().map(item -> Integer.parseInt(String.valueOf(item))).collect(Collectors.toList());
                     }
+                    if (answer != null && answer.size() > 0) {
+                        if (answer.contains(joinOptionRVO.getId())) {
+                            joinOptionRVO.setCheck(true);
+                        } else {
+                            joinOptionRVO.setCheck(false);
+                        }
+                    }
+                }else {
+                    // 填空题
+                    joinOptionRVO.setCheck(false);
                 }
                 joinOptionRVOS.add(joinOptionRVO);
             }

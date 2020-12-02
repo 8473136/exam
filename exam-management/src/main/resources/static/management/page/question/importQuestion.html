@@ -119,7 +119,7 @@
         let initUpload = function () {
             upload.render({
                 elem: '#selectFile'
-                ,url: '/question/analyzeQuestion' //改成您自己的上传接口
+                ,url: '/management/question/analyzeQuestion' //改成您自己的上传接口
                 ,accept: 'file' //普通文件
                 ,auto: false
                 //,multiple: true
@@ -168,10 +168,11 @@
 
         // 开始导入
         $("#startImport").click(function () {
-            http.post('question/importQuestion',{uuid: uuid},false,function (res) {
-
+            http.get('/question/importQuestion',{uuid: uuid},false,function (res) {
+                if (res.code == 200){
+                    step.next('#stepForm');
+                }
             })
-            step.next('#stepForm');
         })
 
         $("#close").click(function () {
@@ -181,7 +182,7 @@
 
         // 下载模板
         form.on('submit(downExcelTemplate)', function () {
-            window.open('/template/题目导入模板.xlsx')
+            window.open('/management/template/题目导入模板.xlsx')
             return false;
         })
     })

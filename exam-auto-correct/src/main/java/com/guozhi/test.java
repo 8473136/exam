@@ -1,8 +1,8 @@
 package com.guozhi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author LiuchangLan
@@ -11,12 +11,11 @@ import java.util.List;
 public class test {
 
     public static void main(String[] args) {
-        List<String> answers = new ArrayList<>();
-        answers.add("2134");
-        answers.add("1");
-        answers.add("34");
-        answers.add("21");
-        Collections.sort(answers);
-        System.out.println(answers);
+        List<Object> a = new ArrayList<>();
+        a.add(1);
+
+
+        List<Integer> collect = a.stream().map(item -> Integer.parseInt(String.valueOf(item))).collect(Collectors.toList());
+        System.out.println(collect.getClass());
     }
 }

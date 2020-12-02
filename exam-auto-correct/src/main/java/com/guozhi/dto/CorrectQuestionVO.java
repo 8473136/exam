@@ -16,7 +16,7 @@ public class CorrectQuestionVO {
     // 是否正确 0正确 1不正确 2半对（多选题）
     private Integer isRightKey;
     // 选择的答案集合
-    private List<Integer> answers;
+    private List<Object> answers;
     // 正确选项数量（多选题用）
     private Integer isRightKeyNum;
     // 题目类型 字典表

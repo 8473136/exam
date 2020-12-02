@@ -24,7 +24,6 @@ public class MyEndpointConfigure extends ServerEndpointConfig.Configurator imple
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
     {
-        System.out.println("auto load"+this.hashCode());
        MyEndpointConfigure.context = applicationContext;
     }
 }

@@ -22,7 +22,7 @@ layui.define(['jquery','layer'], function (exports) {
             success: function (res) {
                 layer.close(loading);
                 if (res.code == 1000){
-                    window.location = '/login.html'
+                    window.location = '/management/login.html'
                 }else if (res.code == 200){
 
                 }else {

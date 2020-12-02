@@ -20,18 +20,32 @@
     </select>
 
     <select id="getUserPaper" resultType="com.guozhi.rvo.UserPaperRVO" parameterType="integer">
+        <![CDATA[
         SELECT
-            p.*,
-            pu.exam_status,
-            (select Max(score) from tab_exam_correct_paper where paper_user_id = pu.id ) score,
-            p.exam_count - (select count(id) from tab_exam_submit_paper where paper_id = p.id and user_id = pu.user_id) remaining_count,
-            (select count(id) from tab_exam_paper_questions where paper_id = p.id) question_num
-        FROM
-            `tab_exam_paper` p
-            LEFT JOIN `tab_exam_paper_user` pu ON p.id = pu.paper_id
-        WHERE
-            pu.user_id = #{userId}
-            AND p.is_deleted = 0
-            AND pu.is_deleted = 0
+            a.*,
+        CASE
+            WHEN now() < a.start_time   THEN 0                         -- 未开始
+            WHEN now() > a.end_time  and a.exam_status = 0  THEN 1     -- 已结束 未考试
+            WHEN now() > a.end_time  and a.exam_status = 1  THEN 2     -- 已结束 已考试
+            WHEN a.exam_status = 0 and a.remaining_count > 0 THEN 3    -- 正常考试
+            WHEN a.exam_status = 1 and a.remaining_count > 0 THEN 4    -- 已经考试 但剩余考试次数不为0
+            WHEN a.exam_status = 1 and a.remaining_count <= 0 THEN 5   -- 已经考试 剩余考试次数为0
+            END exam_type
+        FROM (
+          SELECT
+                p.*,
+                pu.exam_status,
+                (select Max(score) from tab_exam_correct_paper where paper_user_id = pu.id ) score,
+                p.exam_count - (select count(id) from tab_exam_submit_paper where paper_id = p.id and user_id = pu.user_id) remaining_count,
+                (select count(id) from tab_exam_paper_questions where paper_id = p.id) question_num
+            FROM
+                `tab_exam_paper` p
+                LEFT JOIN `tab_exam_paper_user` pu ON p.id = pu.paper_id
+            WHERE
+                pu.user_id = #{userId}
+                AND p.is_deleted = 0
+                AND pu.is_deleted = 0
+        ) a
+        ]]>
     </select>
 </mapper>

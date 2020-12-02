@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="../../css/public.css" media="all">
     <style>
+
+        body{
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
         .layui-card{
             /*background-image: linear-gradient(#a8edea,#fed6e3);*/
             background-color: #f2f5f9;
@@ -26,7 +33,8 @@
             box-shadow: 0px 0px 5px #888888;
             background-color: white;
             border-radius: 10px;
-            width: 69%;
+            width: 66%;
+            margin-right: 20px;
             /*padding-bottom: 30px;*/
         }
         .main_right{
@@ -35,6 +43,7 @@
             background-color: white;
             margin-left: 10px;
             border-radius: 10px;
+            margin-right: 10px;
         }
         .footer{
             width: 100%;
@@ -70,19 +79,20 @@
             /*height: 400px;*/
         }
         .question_title{
+            margin-top: 10px;
             width: 100%;
             /*text-indent: 2em;*/
-            /*font-size: 20px;*/
+            font-size: 20px;
             line-height: 40px;
-            height: 40px;
         }
 
         .question_option{
             margin: 20px auto;
             width: 100%;
             /*height: 50px;*/
-            border-radius: 15px;
-            border: black solid 1px;
+            border-radius: 5px;
+            /*border: black solid 1px;*/
+            box-shadow: 0px 0px 5px #888888;
             /*background-color: #E3E9C2;*/
             /*background-image: linear-gradient(to right,#5ee7df,#b490ca);*/
             /*line-height: 50px;*/
@@ -93,6 +103,9 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            height: 40px;
+            line-height: 40px;
+            font-size: 18px;
         }
         .question_button{
             text-align: center;
@@ -213,10 +226,21 @@
 
         #prev{
             border-bottom-left-radius: 10px;
-
         }
         #next{
             border-bottom-right-radius: 10px;
+        }
+        .select_question{
+            margin-top: 10px;
+            width: 40px;
+        }
+        .question_title_text{
+            width: 87%;
+            display: inline-block;
+        }
+
+        .todo_question_color{
+            background-color: #ff8100;
         }
     </style>
 </head>
@@ -254,18 +278,26 @@
                 {{#  layui.each(d.data.questionDTOS, function(index, item){ }}
                 <div class="question" id="question_{{index + 1}}" question_type="{{item.questionType}}" question_id="{{item.id}}">
                     <div class="question_title">
-                        <span class="layui-badge-rim layui-bg-blue">{{index + 1}}/{{d.data.questionDTOS.length}}</span>
-                        <span class="layui-badge-rim layui-bg-blue">{{item.questionTypeChinese}}</span>
-                        <span>{{item.questionName}}</span>
-                        <span>({{item.questionScore}}分)</span>
-                        <div class="question_mark" id="mark"><img height="20" width="20" src="../../images/mark.png">标记</div>
+<!--                        <div class="question_title_text">-->
+<!--                        </div>-->
+                            <span class="layui-badge-rim layui-bg-blue">{{index + 1}}/{{d.data.questionDTOS.length}}</span>
+                            <span class="layui-badge-rim layui-bg-blue">{{item.questionTypeChinese}}</span>
+                            {{item.questionName}}
+                            <span>({{item.questionScore}}分)</span>
+                            <div class="question_mark" id="mark"><img height="20" width="20" src="../../images/mark.png"><span>标记</span></div>
                     </div>
-                {{#  layui.each(item.options, function(indexO, option){ }}
+                    {{#  layui.each(item.options, function(indexO, option){ }}
+
+                    {{# if (item.questionType == 'TIANKONGTI') { }}
+                    <input type="text" class="layui-input question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}" value="{{d.data.submitAnswerVO.answerVOS[index].answer[indexO] ? d.data.submitAnswerVO.answerVOS[index].answer[indexO].value : ''}}">
+                    {{# }else{ }}
                     <div class="question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}"
-                         style="background-color: {{option.check ? 'red' : 'white'}}">
+                         style="background-color: {{option.check ? {{!'rgb(255, 129, 0);'!}} : 'white'}}">
                         {{String.fromCharCode(indexO + 65)}}、{{option.optionContent}}
                     </div>
-                {{#  }); }}
+                    {{# } }}
+
+                    {{#  }); }}
                 </div>
                 {{#  }); }}
             </div>
@@ -292,15 +324,15 @@
                 <div style="margin-top: 20px">答题卡</div>
                 <div class="answer_card_main">
                     {{#  layui.each(d.data.questionDTOS, function(index, item){ }}
-                    <button type="button" class="layui-btn layui-btn-xs layui-btn-primary select_question" id="select_question_{{index + 1}}" index="{{index + 1}}">{{index + 1}}<span class=""></span></button>
+                    <button type="button" style="margin-left: 0;padding: 0" class="layui-btn layui-btn-primary select_question" id="select_question_{{index + 1}}" index="{{index + 1}}">{{index + 1}}<span class=""></span></button>
                     {{#  }); }}
                 </div>
                 <div class="answer_card_prompt">
-                    已做<span class="layui-bg-orange" style="width: 13px;height: 13px;display: inline-block"></span>
+                    已做<span class="todo_question_color" style="width: 13px;height: 13px;display: inline-block"></span>
                     未做<span style="width: 13px;height: 13px;display: inline-block;border: 1px solid #dcdcdc;"></span>
                     标记<span class="layui-bg-blue" style="width: 13px;height: 13px;display: inline-block"></span>
                 </div>
-                <button class="layui-btn layui-bg-orange submit_btn">我要交卷</button>
+                <button class="layui-btn todo_question_color submit_btn">我要交卷</button>
             </div>
         </div>
         <br style="clear:both;">
@@ -360,7 +392,7 @@
                     // 展示第一题
                     $('#question_1').show()
 
-                    if (res.data.submitAnswerVO.examTime){
+                    if (res.data.submitAnswerVO && res.data.submitAnswerVO.examTime){
                         // 如果有缓存时间走缓存时间
                         examDuration = res.data.submitAnswerVO.examTime * 60 * 1000
                     }else {
@@ -373,7 +405,7 @@
                     let lefth = Math.floor(examDuration/(1000*60*60)%24),  //计算小时数
                         leftm = Math.floor(examDuration/(1000*60)%60),  //计算分钟数
                         lefts = Math.floor(examDuration/1000%60);  //计算秒数
-                    html = '答题剩余时间' + (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
+                    html = (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
                     $('#last_time_text').html(html)
 
                     // 定时器倒计时
@@ -381,7 +413,7 @@
                         let lefth = Math.floor(examDuration/(1000*60*60)%24),  //计算小时数
                             leftm = Math.floor(examDuration/(1000*60)%60),  //计算分钟数
                             lefts = Math.floor(examDuration/1000%60);  //计算秒数
-                        html = '答题剩余时间' + (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
+                        html = (lefth < 10 ? '0' + lefth : lefth) + ':' + (leftm < 10 ? '0' + leftm : leftm) + ':' + (lefts < 10 ? '0' + lefts : lefts)
                         examDuration -= 1000;
                         $('#last_time_text').html(html)
                         if (examDuration <= 0){
@@ -391,10 +423,20 @@
                         }
                     }, 1000);  //反
                     // 缓存中有答案
-                    if (res.data.submitAnswerVO.answerVOS){
+                    if (res.data.submitAnswerVO && res.data.submitAnswerVO.answerVOS){
                         submitQuestion = res.data.submitAnswerVO.answerVOS
+                        // 已经答题的样式
+                        let style = 'todo_question_color'
+                        submitQuestion.forEach((item,i) => {
+                            // todo 填空题渲染答题卡有问题
+                            if (item && item.answer && item.answer.length > 0){
+                                // 答题卡按钮dom
+                                let dom = $('#select_question_' + (i + 1))
+                                dom.addClass(style)
+                            }
+                        })
                     }
-                    layer.msg("缓存中的答案为" + JSON.stringify(res.data.submitAnswerVO))
+                    // layer.msg("缓存中的答案为" + JSON.stringify(res.data.submitAnswerVO))
                 }
             })
         }
@@ -422,7 +464,7 @@
             // layer.msg('提交的答案' + JSON.stringify(submitAnswer))
             http.post('pc/paper/submitPaper',JSON.stringify(submitAnswer),true,function (res) {
                 if (res.code == 200){
-                    layer.msg(res.msg,function () {
+                    layer.msg(res.msg,{shade: [0.3, '#000']},function () {
                         window.location.replace('paperView.html')
                     })
                 }
@@ -431,7 +473,32 @@
 
         // 是否正在考试
         let isClientConnection = function () {
-            var ws = $.websocket("ws://" + window.location.host + "/ExamNow/"+id+"/"+3+"/pc端");
+            var loading = undefined;
+            let webSocketUrl = "ws://" + window.location.host + "/ExamNow/"+id+"/"+3+"/pc端"
+            var ws = new WebSocket(webSocketUrl);
+            // 连接回调
+            ws.onopen = function() {
+                //成功连接到服务器
+                console.log('成功连接')
+                loading = layer.load(0, {shade: [0.3, '#000']});
+            }
+            // 断开回调
+            ws.onclose = function(e) {
+                console.log('退出考试')
+            }
+            // 接收消息回调
+            ws.onmessage = function(e) {
+                //服务器发送通知
+                //开始处理
+                console.log(e.data)
+                if (JSON.parse(e.data)){
+                    layer.close(loading)
+                }else {
+                    layer.msg("该帐号已经有人在考试",{icon: 2},function () {
+                        window.location.replace('./paperView.html')
+                    })
+                }
+            }
         }
 
         /**方-------------------------------法-------------------------------定-------------------------------义*/
@@ -444,7 +511,7 @@
             // 展示第一题
             $('#question_' + index).show()
             currentQuestionNum = index
-            layer.msg('跳转到' + index)
+            // layer.msg('跳转到' + index)
         })
 
         // 下一题
@@ -460,7 +527,6 @@
 
         // 标记
         $(document).on('click','#mark',function () {
-            layer.msg('标记')
             // 标记的class样式
             let style = 'layui-bg-blue'
             // 获取dom对象
@@ -469,9 +535,11 @@
             if (dom.hasClass(style)) {
                 // 包含则移除
                 dom.removeClass(style)
+                $($(this).children()[1]).html('标记')
             }else {
                 // 不包含则添加
                 dom.addClass(style)
+                $($(this).children()[1]).html('取消标记')
             }
         })
 
@@ -488,7 +556,7 @@
         // 点击选项
         $(document).on('click','.question_option',function(){
             // 已经答题的样式
-            let style = 'layui-bg-orange'
+            let style = 'todo_question_color'
             // 答题卡按钮dom
             let dom = $('#select_question_' + currentQuestionNum)
             // 题目类型
@@ -501,50 +569,107 @@
             let questionId = $(this).attr('question_id');
             // 答案
             let answer = []
-            // 已经选中
-            if (check && JSON.parse(check)){
-                // 取消选择
-                $(this).css('backgroundColor','white')
-                $(this).attr('check',false);
-                dom.removeClass(style)
-            }else {
-                // 选择
-                $(this).css('backgroundColor','red')
-                $(this).attr('check',true);
-                dom.addClass(style)
-            }
+            // 非填空题点击效果
+            if (questionType != 'TIANKONGTI'){
+                // 已经选中
+                if (check && JSON.parse(check)){
+                    // 取消选择
+                    $(this).css('backgroundColor','white')
+                    $(this).attr('check',false);
+                    dom.removeClass(style)
+                }else {
+                    // 选择
+                    $(this).css('backgroundColor','#ff8100')
+                    $(this).attr('check',true);
+                    dom.addClass(style)
+                }
 
-            // 非多选题
-            if (questionType != 'DUOXUANTI'){
-                let that = this
-                // 清除其他选择
+                // 非多选题
+                if (questionType != 'DUOXUANTI'){
+                    let that = this
+                    // 清除其他选择
+                    $(this).parent().children('.question_option').each(function () {
+                        if ($(this).attr('option') != $(that).attr('option')){
+                            $(this).css('backgroundColor','white')
+                            $(this).attr('check',false)
+                        }
+                    })
+                }
+
+                // 获取选择的答案
                 $(this).parent().children('.question_option').each(function () {
-                    if ($(this).attr('option') != $(that).attr('option')){
-                        $(this).css('backgroundColor','white')
-                        $(this).attr('check',false)
+                    let optionCheck = $(this).attr('check');
+                    if (optionCheck && JSON.parse(optionCheck)){
+                        answer.push($(this).attr('option'))
                     }
                 })
-            }
 
-            // 获取选择的答案
-            $(this).parent().children('.question_option').each(function () {
-                let optionCheck = $(this).attr('check');
-                if (optionCheck && JSON.parse(optionCheck)){
-                    answer.push($(this).attr('option'))
+                submitQuestion[currentQuestionNum - 1] = {
+                    questionId: questionId, // 题号
+                    answer: answer // 选择的答案
                 }
-            })
-
-
-            submitQuestion[currentQuestionNum - 1] = {
-                questionId: questionId, // 题号
-                answer: answer // 选择的答案
             }
+
 
             // layer.msg('选择的答案:' + JSON.stringify(submitQuestion))
         });
 
         $(document).on('click','.submit_btn',function () {
             submitAnswer(0)
+        })
+
+
+        $(document).on('input','.question_option',function () {
+            // 已经答题的样式
+            let style = 'todo_question_color'
+            // 答题卡按钮dom
+            let dom = $('#select_question_' + currentQuestionNum)
+            // 题号
+            let questionId = $(this).attr('question_id');
+            // 选项号
+            let optionId = $(this).attr('option');
+            // 输入的答案
+            let value = $(this).prop('value')
+
+            submitQuestion[currentQuestionNum - 1].questionId = questionId
+            let answer = []
+            if (submitQuestion[currentQuestionNum - 1].answer){
+                answer = submitQuestion[currentQuestionNum - 1].answer
+            }
+
+
+            let is = true, // 是否为新增答案
+                isaq = false; // 是否已经答题
+
+
+            // 修改答案
+            answer.forEach(item => {
+                if ((item.optionId == optionId)) {
+                    item.value = value
+                    is = false
+                }
+            })
+            // 新增答案
+            if (is){
+                answer.push({
+                    optionId: optionId,
+                    value: value
+                })
+            }
+
+            answer.forEach(item => {
+                if (!isaq && trim(item.value)){
+                    isaq = true
+                }
+            })
+
+            if (isaq){
+                dom.addClass(style)
+            }else {
+                dom.removeClass(style)
+            }
+
+            submitQuestion[currentQuestionNum - 1].answer = answer
         })
 
         /**事-------------------------------件-------------------------------绑-------------------------------定*/

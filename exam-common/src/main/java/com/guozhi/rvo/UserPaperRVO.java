@@ -22,4 +22,13 @@ public class UserPaperRVO extends PaperDTO {
 
     // 剩余考试次数
     private Integer remainingCount;
+
+    //  试卷状态
+    //  0 未开始
+    //  1 已结束 未考试
+    //  2 已结束 已考试
+    //  3 正常考试
+    //  4 已经考试 但剩余考试次数不为0
+    //  5 已经考试 剩余考试次数为0
+    private Integer examType;
 }

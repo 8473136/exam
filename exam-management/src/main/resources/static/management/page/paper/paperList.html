@@ -24,8 +24,10 @@
 
 <!-- 操作列 -->
 <script type="text/html" id="operating">
+    {{#  if(d.paperStatus == "0"){ }}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="release">发布</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="question">导题</a>
+    {{#  } }}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>

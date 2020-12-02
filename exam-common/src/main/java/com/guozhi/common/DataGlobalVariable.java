@@ -79,4 +79,10 @@ public class DataGlobalVariable {
     /** 正在考试*/
     public static final Integer EXAM_STATUS_TAKING_EXAM = 2;
 
+    /** 试卷状态-未发布*/
+    public static final Integer PAPER_STATUS_PUBLISHED = 1;
+
+    /** 试卷状态-已发布*/
+    public static final Integer PAPER_STATUS_UNPUBLISHED = 0;
+
 }

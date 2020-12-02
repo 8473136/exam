@@ -86,13 +86,19 @@
                 <p>开始时间：{{item.startTime}} 结束时间：{{item.endTime}}</p>
             </td>
             <td class="paper_status">
-                {{# if (item.examStatus == 0) { }}
-                <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
-                {{# } else if (item.examStatus == 1  && item.remainingCount > 0) { }}
-                <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
-                <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
-                {{# } else { }}
-                <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
+                {{# if (item.examType == 0){ }}
+                    <div style="color: forestgreen;font-size: 20px;text-align: center">考试未开始</div>
+                {{# } else if (item.examType == 1) { }}
+                    <div style="color: forestgreen;font-size: 20px;text-align: center">很抱歉，你已经错过此次考试</div>
+                {{# } else if (item.examType == 2) { }}
+                    <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
+                {{# } else if (item.examType == 3) { }}
+                    <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
+                {{# } else if (item.examType == 4) { }}
+                    <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
+                    <button class="layui-btn layui-btn-normal takePaper" style="display: block;margin: 0 auto" id="{{item.id}}">参加考试</button>
+                {{# } else if (item.examType == 5) { }}
+                     <div style="color: forestgreen;font-size: 20px;text-align: center">考试得分：{{item.score}}分</div>
                 {{# } }}
             </td>
         </tr>

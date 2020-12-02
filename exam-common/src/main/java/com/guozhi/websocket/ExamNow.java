@@ -68,7 +68,7 @@ public class ExamNow {
         }else {
             this.sendMessage(userId,"true");
         }
-        log.info("客户端{}连接了 当前在线人数：{}", userId, clients.size());
+        log.info("客户端{}连接了 当前服务器在线人数：{} 所有服务器在线总人数: {}", userId, clients.size(),stringRedisTemplate.keys("Exam*").size());
     }
 
     /**
@@ -82,7 +82,7 @@ public class ExamNow {
         String key = "Exam" + userId + paperId;
         stringRedisTemplate.opsForList().leftPop(key);
         clients.remove(userId);
-        log.info("客户端{}断开了 当前在线人数：{}", userId, clients.size());
+        log.info("客户端{}连接了 当前服务器在线人数：{} 所有服务器在线总人数: {}", userId, clients.size(),stringRedisTemplate.keys("Exam*").size());
     }
 
     /**
