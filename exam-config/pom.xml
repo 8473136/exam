@@ -12,6 +12,7 @@
     <version>1.0.0</version>
     <name>exam-config</name>
     <description>配置模块</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

@@ -287,8 +287,7 @@ public class PaperServiceImpl implements PaperService {
                 List<Integer> answer = new ArrayList<>();
                 if (!DataGlobalVariable.FILL_QUESTION_DICT_CODE.equals(questionsDTO.getQuestionType())) {
                     // 非填空题
-                    if (submitAnswerVO != null) {
-
+                    if (submitAnswerVO != null && submitAnswerVO.getAnswerVOS().get(submitAnswerIndex).getAnswer() != null) {
                         answer = submitAnswerVO.getAnswerVOS().get(submitAnswerIndex).getAnswer().stream().map(item -> Integer.parseInt(String.valueOf(item))).collect(Collectors.toList());
                     }
                     if (answer != null && answer.size() > 0) {
@@ -300,7 +299,7 @@ public class PaperServiceImpl implements PaperService {
                     }
                 }else {
                     // 填空题
-                    joinOptionRVO.setCheck(false);
+//                    joinOptionRVO.setCheck(false);
                 }
                 joinOptionRVOS.add(joinOptionRVO);
             }

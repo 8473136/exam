@@ -12,6 +12,7 @@
     <version>1.0.0</version>
     <name>exam-common</name>
     <description>公用模块</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

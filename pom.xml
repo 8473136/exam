@@ -22,6 +22,7 @@
         <module>exam-pc</module>
         <module>exam-auto-correct</module>
         <module>package</module>
+        <module>exam-mobile</module>
     </modules>
 
     <properties>
@@ -55,7 +56,17 @@
             </dependency>
             <dependency>
                 <groupId>com.guozhi</groupId>
+                <artifactId>exam-pc</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.guozhi</groupId>
                 <artifactId>exam-management</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.guozhi</groupId>
+                <artifactId>exam-auto-correct</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <!--        mybatis-->

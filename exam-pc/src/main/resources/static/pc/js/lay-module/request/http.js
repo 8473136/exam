@@ -4,10 +4,14 @@ layui.define(['jquery','layer'], function (exports) {
         // requestUrl = 'http://192.168.157.154:9090/';
         /** war包 如果有项目名后面填写项目名 没有项目名就去除（没有项目名需要保留斜杠）*/
         // requestUrl = window.location.origin + '/archives-1.1.0/';
-        requestUrl = window.location.origin + '/';
+        requestUrl = window.location.origin + '/',
+        notLoading = ['pc/paper/saveAnswer'];
 
     let ajax = function (method, type, data, async, callback) {
-        var loading = layer.load(0, {shade: [0.3, '#000']});
+        var loading;
+        if (!notLoading.concat(method)){
+            loading = layer.load(0, {shade: [0.3, '#000']});
+        }
         $.ajax({
             url: requestUrl + method,
             type: type,

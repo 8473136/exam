@@ -5,6 +5,7 @@ layui.define(['jquery','layer'], function (exports) {
         /** war包 如果有项目名后面填写项目名 没有项目名就去除（没有项目名需要保留斜杠）*/
         // requestUrl = window.location.origin + '/archives-1.1.0/';
         requestUrl = window.location.origin + '/management/';
+        // requestUrl = window.location.origin + '/exam/management/';
 
     let ajax = function (method, type, data, async, callback) {
         var loading = layer.load(0, {shade: [0.3, '#000']});

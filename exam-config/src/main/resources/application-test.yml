@@ -54,7 +54,7 @@ spring:
   # redis配置
   redis:
     # redis地址
-    host: 192.168.0.109
+    host: hz.aifyun.com
     # redis端口
     port: 6379
     # redis库
@@ -70,7 +70,7 @@ spring:
         # 连接池中的最小空闲连接
         min-idle: 2
     # 密码
-    password: 123456
+    password: 2806573
     # 连接超时时间（毫秒）
     timeout: 30000
   servlet:
@@ -83,7 +83,7 @@ spring:
       enabled: true
   # rabbitMq配置
   rabbitmq:
-    host: 192.168.0.109
+    host: hz.aifyun.com
     port: 5672
     username: admin
     password: admin

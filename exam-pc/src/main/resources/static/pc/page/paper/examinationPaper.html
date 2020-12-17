@@ -289,7 +289,7 @@
                     {{#  layui.each(item.options, function(indexO, option){ }}
 
                     {{# if (item.questionType == 'TIANKONGTI') { }}
-                    <input type="text" class="layui-input question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}" value="{{d.data.submitAnswerVO.answerVOS[index].answer[indexO] ? d.data.submitAnswerVO.answerVOS[index].answer[indexO].value : ''}}">
+                        <input type="text" class="layui-input question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}" value="{{(d.data.submitAnswerVO && d.data.submitAnswerVO.answerVOS[index].answer[indexO] ) ? d.data.submitAnswerVO.answerVOS[index].answer[indexO].value : ''}}">
                     {{# }else{ }}
                     <div class="question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}"
                          style="background-color: {{option.check ? {{!'rgb(255, 129, 0);'!}} : 'white'}}">
@@ -369,6 +369,7 @@
             totalQuestionNum = 0, //总题数
             submitQuestion = [], //答案
             examDuration = 0 // 考试剩余时间
+        // 加载试卷信息
         let initPaper = function () {
             // 生成题目数组
             http.get('pc/paper/joinPaper',{
@@ -428,11 +429,26 @@
                         // 已经答题的样式
                         let style = 'todo_question_color'
                         submitQuestion.forEach((item,i) => {
-                            // todo 填空题渲染答题卡有问题
-                            if (item && item.answer && item.answer.length > 0){
-                                // 答题卡按钮dom
-                                let dom = $('#select_question_' + (i + 1))
-                                dom.addClass(style)
+                            // 答题卡按钮dom
+                            let dom = $('#select_question_' + (i + 1))
+                            if ((res.data.questionDTOS[i].questionType != 'TIANKONGTI')) {
+                                // 非填空题判断该题是否答题
+                                if (item && item.answer && item.answer.length > 0){
+                                    dom.addClass(style)
+                                }
+                            }else {
+                                // 填空题判断该题是否答了
+                                let is = false;
+                                if (item && item.answer){
+                                    item.answer.forEach(itemTianKong => {
+                                        if (!is && itemTianKong.value && trim(itemTianKong.value)){
+                                            is = true
+                                        }
+                                    })
+                                }
+                                if (is){
+                                    dom.addClass(style)
+                                }
                             }
                         })
                     }
@@ -440,6 +456,7 @@
                 }
             })
         }
+        // 缓存答案到服务器
         let saveAnswer = function () {
             let submitAnswer = {
                 userId: '3',
@@ -451,8 +468,6 @@
                 console.log(res)
             })
         }
-
-
         // 交卷方法 commitType 交卷类型 0提前交卷 1自动交卷
         let submitAnswer = function (commitType) {
             let submitAnswer = {
@@ -470,7 +485,6 @@
                 }
             })
         }
-
         // 是否正在考试
         let isClientConnection = function () {
             var loading = undefined;
@@ -502,7 +516,6 @@
         }
 
         /**方-------------------------------法-------------------------------定-------------------------------义*/
-
         // 答题卡选择
         $(document).on('click','.select_question',function () {
             let index = $(this).attr('index');
@@ -513,7 +526,6 @@
             currentQuestionNum = index
             // layer.msg('跳转到' + index)
         })
-
         // 下一题
         $(document).on('click','#next',function(){
             if (currentQuestionNum < (totalQuestionNum)){
@@ -524,7 +536,6 @@
                 layer.msg("这是最后一题了哦!")
             }
         });
-
         // 标记
         $(document).on('click','#mark',function () {
             // 标记的class样式
@@ -542,7 +553,6 @@
                 $($(this).children()[1]).html('取消标记')
             }
         })
-
         // 上一题
         $(document).on('click','#prev',function(){
             if (currentQuestionNum > 1){
@@ -552,7 +562,6 @@
                 layer.msg("没有上一题了哦!")
             }
         });
-
         // 点击选项
         $(document).on('click','.question_option',function(){
             // 已经答题的样式
@@ -614,6 +623,7 @@
             // layer.msg('选择的答案:' + JSON.stringify(submitQuestion))
         });
 
+        // 提交试卷监听
         $(document).on('click','.submit_btn',function () {
             submitAnswer(0)
         })
@@ -630,40 +640,45 @@
             let optionId = $(this).attr('option');
             // 输入的答案
             let value = $(this).prop('value')
-
-            submitQuestion[currentQuestionNum - 1].questionId = questionId
+            // 构建选项答案数组
             let answer = []
+
+            // 构建缓存对象
+            // 缓存题目id
+            submitQuestion[currentQuestionNum - 1].questionId = questionId
+            // 缓存的选项答案
             if (submitQuestion[currentQuestionNum - 1].answer){
+                // 已经答过题 直接获取之前的答案对象
                 answer = submitQuestion[currentQuestionNum - 1].answer
+            }else {
+                // 第一次答题 构建新的缓存对象
+                // 当前题目有多少个选项
+                let optionNum = $(this).parent().children('input').length;
+                for (let i = 0; i < optionNum; i++) {
+                    let itemOptionId = $($(this).parent().children('input')[i]).attr('option');
+                    answer.push({
+                        optionId: itemOptionId,
+                        value: ''
+                    })
+                }
             }
 
-
-            let is = true, // 是否为新增答案
-                isaq = false; // 是否已经答题
-
+            // 判断是否答题(控制答题卡)
+            let is = false;
 
             // 修改答案
             answer.forEach(item => {
+                // 找到对应的选项 赋值到选项
                 if ((item.optionId == optionId)) {
                     item.value = value
-                    is = false
+                }
+                // 判断是否答题
+                if (!is && item.value && trim(item.value)){
+                    is = true
                 }
             })
-            // 新增答案
+
             if (is){
-                answer.push({
-                    optionId: optionId,
-                    value: value
-                })
-            }
-
-            answer.forEach(item => {
-                if (!isaq && trim(item.value)){
-                    isaq = true
-                }
-            })
-
-            if (isaq){
                 dom.addClass(style)
             }else {
                 dom.removeClass(style)
