@@ -16,17 +16,18 @@
         <dependency>
             <groupId>com.guozhi</groupId>
             <artifactId>exam-auto-correct</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.guozhi</groupId>
             <artifactId>exam-pc</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.guozhi</groupId>
             <artifactId>exam-management</artifactId>
-            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.guozhi</groupId>
+            <artifactId>exam-mobile</artifactId>
         </dependency>
     </dependencies>
 

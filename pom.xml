@@ -69,6 +69,11 @@
                 <artifactId>exam-auto-correct</artifactId>
                 <version>1.0.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.guozhi</groupId>
+                <artifactId>exam-mobile</artifactId>
+                <version>1.0.0</version>
+            </dependency>
             <!--        mybatis-->
             <dependency>
                 <groupId>tk.mybatis</groupId>

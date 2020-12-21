@@ -289,7 +289,7 @@
                     {{#  layui.each(item.options, function(indexO, option){ }}
 
                     {{# if (item.questionType == 'TIANKONGTI') { }}
-                        <input type="text" class="layui-input question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}" value="{{(d.data.submitAnswerVO && d.data.submitAnswerVO.answerVOS[index].answer[indexO] ) ? d.data.submitAnswerVO.answerVOS[index].answer[indexO].value : ''}}">
+                        <input type="text" class="layui-input question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}" value="{{(d.data.submitAnswerVO && d.data.submitAnswerVO.answerVOS[index] && d.data.submitAnswerVO.answerVOS[index].answer) ? d.data.submitAnswerVO.answerVOS[index].answer[indexO].value : ''}}">
                     {{# }else{ }}
                     <div class="question_option" option="{{option.id}}" question_id="{{item.id}}" check="{{option.check}}"
                          style="background-color: {{option.check ? {{!'rgb(255, 129, 0);'!}} : 'white'}}">

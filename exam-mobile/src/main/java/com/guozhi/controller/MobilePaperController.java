@@ -1,4 +1,4 @@
-package com.guozhi.exammobile.controller;
+package com.guozhi.controller;
 
 import com.guozhi.core.BusinessException;
 import com.guozhi.core.Result;
